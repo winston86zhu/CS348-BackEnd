@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    build:
+      context: db
+      dockerfile: Dockerfile
+    image: db
+    container_name: db
+    ports:
+      - "5432:5432"
+
+  perfectparty:
+    build:
+      context: perfectparty
+      dockerfile: Dockerfile
+    image: perfectparty
+    container_name: perfectparty
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
