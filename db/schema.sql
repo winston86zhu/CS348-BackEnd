@@ -33,7 +33,7 @@ CREATE TABLE Food (
 	PRIMARY KEY (ItemId)
 );
 
-CREATE TABLE "User" (
+CREATE TABLE "user" (
 	UserID int NOT NULL PRIMARY KEY,
 	FirstName varchar(255) NOT NULL,
 	LastName varchar(255) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE "User" (
 
 CREATE TABLE Supplier (
 	SupplierUserID int NOT NULL
-        REFERENCES "User" (UserID)
+        REFERENCES "user" (UserID)
         ON DELETE CASCADE,
 	BankingAccount varchar(255) NOT NULL,
 	WebsiteLink varchar(255),
@@ -55,7 +55,7 @@ CREATE TABLE Supplier (
 
 CREATE TABLE Client (
 	ClientUserID int NOT NULL
-	    REFERENCES "User" (UserID)
+	    REFERENCES "user" (UserID)
         ON DELETE CASCADE,
 	AccountBalance decimal(9, 2) DEFAULT 0
         CHECK(AccountBalance >= 000000000.00),
@@ -65,7 +65,7 @@ CREATE TABLE Client (
 
 CREATE TABLE Planner (
 	PlannerUserID int NOT NULL
-        REFERENCES "User" (UserID)
+        REFERENCES "user" (UserID)
         ON DELETE CASCADE,
 	Position varchar(255),
 	Rate int CHECK (Rate > 0),
@@ -76,7 +76,7 @@ CREATE TABLE Planner (
 
 CREATE TABLE PhoneNumber (
 	UserID int NOT NULL
-        REFERENCES "User" (UserId)
+        REFERENCES "user" (UserId)
         ON DELETE CASCADE,
 	PhoneNumber int NOT NULL,
 	TypeOfPhone varchar(30),
@@ -136,7 +136,7 @@ CREATE TABLE Event (
 );
 
 
-CREATE TABLE "Order" (
+CREATE TABLE "order" (
 	ItemID int NOT NULL
 	    REFERENCES SUPPLY (ItemId)
         ON DELETE CASCADE,
