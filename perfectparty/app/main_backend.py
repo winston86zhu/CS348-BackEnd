@@ -6,6 +6,8 @@ import psycopg2
 import os
 import getopt
 import ast
+import json
+from psycopg2.extras import RealDictCursor
 
 
 
@@ -23,13 +25,16 @@ def insert_data(vendor_name, value):
     conn=psycopg2.connect(user = "postgres", password = "", host = "localhost",port = "5432", database = "postgres");
     cursor = conn.cursor()
 
-    sql_client = """INSERT into Client values (%s, %s);"""
+    sql_client = """INSERT into Client values (%s, %s);""" #(id, acc_balance)
     sql_flower = """INSERT into Flower values (%s, '%s');""" #(id, flower_color)
     sql_music = """INSERT into Music values (%s, '%s', '%s');"""#(id, genre, artist)
     sql_food = """INSERT into Food values (%s, '%s', '%s');"""#(id, foodtype, FoodIngredients )
     sql_user ="""INSERT into "user" values (%s, '%s', '%s', '%s', '%s');"""#(id, fname,lname,pass,email)
-    sql_supplier ="""INSERT into user Supplier values (%s, '%s', '%s', '%s');"""#(id, bank,web, email)
-    sql_planner = """INSERT into user Planner values (%s, '%s', '%s', '%s', '%s');"""#(id, position,rate, bankacc)
+    sql_supplier ="""INSERT into Supplier values (%s, '%s', '%s', '%s');"""#(id, bank,web, email)
+    sql_planner = """INSERT into Planner values (%s, '%s', %s, '%s');"""#(id, position,rate, bankacc)
+    sql_event = """INSERT into Event values
+    (%s, %s, %s, %s, %s, '%s', %s, %s, '%s', '%s');"""
+    #(id, clientid, plannerid, loca_id, inst_id, eventname, budget, fee, start_time, endtime)
 
     options = {"client" : sql_client,
            "flower" : sql_flower,
@@ -38,6 +43,7 @@ def insert_data(vendor_name, value):
            "\"user\"" : sql_user,
            "supplier" : sql_supplier,
            "planner" : sql_planner,
+           "event" : sql_event
     }
 
     sql_ins = options[vendor_name];
@@ -92,7 +98,7 @@ def select_all_where(table, selected_item,where, order_by):
 
     try:
         #conn = psycopg2.connect(conn_string)
-        cur = conn.cursor()
+        cur = conn.cursor(cursor_factory = RealDictCursor)
         if (where != ""):
             if(order_by != ""):
                 cur.execute("SELECT " + final_selected + " FROM " +
@@ -106,11 +112,11 @@ def select_all_where(table, selected_item,where, order_by):
 
         print("The number of parts: ", cur.rowcount)
         """fecth all data from selection"""
-        row = cur.fetchone()
- 
-        while row is not None:
-            print(row)
-            row = cur.fetchone()
+        result = cur.fetchall();
+        print(json.dumps(result, indent=2))
+
+        with open('output.json', 'w') as outfile:
+            json.dump(result, outfile, indent= 2);
  
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
