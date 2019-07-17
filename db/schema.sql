@@ -34,11 +34,11 @@ CREATE TABLE Food (
 );
 
 CREATE TABLE "user" (
-	UserID int NOT NULL PRIMARY KEY,
+	UserID SERIAL PRIMARY KEY,
 	FirstName varchar(255) NOT NULL,
 	LastName varchar(255) NOT NULL,
-	Password varchar(255) NOT NULL,
-	Email varchar(255) NOT NULL UNIQUE
+	Email varchar(255) NOT NULL UNIQUE,
+	Password varchar(255) NOT NULL
 );
 
 
