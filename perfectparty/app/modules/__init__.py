@@ -1,4 +1,4 @@
-MODULES = ['user']
+MODULES = ['user', 'auth']
 
 
 def init_api(api):
