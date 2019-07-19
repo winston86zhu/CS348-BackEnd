@@ -23,8 +23,9 @@ class UserResource(Resource):
             return response
 
         try:
-            institution_id = payload['InstitutionID']
+            #institution_id = payload['InstitutionID']
             phone_number = payload['PhoneNumber']
+            lp_name = payload['Loan_ProviderName']
             url = payload['EmbeddedURL']
         except KeyError as e:
             response = jsonify({
@@ -35,7 +36,7 @@ class UserResource(Resource):
             return response
 
         manager = LPManager()
-        lp = LP(institution_id,phone_number,url)
+        lp = LP(-1,lp_name, phone_number,url)
 
         try:
             manager.create(lp)
@@ -48,7 +49,7 @@ class UserResource(Resource):
             return response
 
         try:
-            result = manager.fetch_all_LP()
+            result = manager.fetch_by_id(lp.InstitutionID)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',

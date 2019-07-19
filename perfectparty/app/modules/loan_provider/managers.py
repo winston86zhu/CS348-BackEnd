@@ -9,11 +9,12 @@ class LPManager(db_conn):
     def deserialize(self, row):
         return LP(*row)
 
-    def create(self, user):
+    def create(self, lp):
         query = f"""
             INSERT 
-            INTO Loan_Provider (InstitutionID, PhoneNumber, EmbeddedURL)
-            VALUES('{LP.InstitutionID}', '{LP.PhoneNumber}', '{LP.EmbeddedURL}')
+            INTO Loan_Provider (Loan_ProviderName, PhoneNumber, EmbeddedURL)
+            VALUES ('{lp.Loan_ProviderName}',
+            '{lp.PhoneNumber}', '{lp.EmbeddedURL}')
         """
 
         try:
@@ -21,6 +22,20 @@ class LPManager(db_conn):
         except Exception as e:
             self.rollback()
             raise e
+    
+    def fetch_by_id(self, lp_id):
+        query = f"""
+            SELECT * 
+            FROM Loan_Provider 
+            WHERE InstitutionID='{lp_id}'
+        """
+        try:
+            result = self.fetch_single_row(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+        return self.deserialize(result)
 
     def fetch_all_LP(self):
         query = f"""
