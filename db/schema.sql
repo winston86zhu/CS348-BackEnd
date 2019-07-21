@@ -114,25 +114,24 @@ CREATE TABLE Loan_Provider (
 
 
 CREATE TABLE Event (
-	EventID int NOT NULL,
+	EventID SERIAL PRIMARY KEY,
 	ClientUserID int NOT NULL
 	    REFERENCES Client (ClientUserID)
 	    ON DELETE CASCADE,
-    PlannerUserID int NOT NULL
+    PlannerUserID int
         REFERENCES Planner (PlannerUserID)
         ON DELETE SET NULL,
-	LocationID int NOT NULL
+	LocationID int
 	    REFERENCES Location (LocationID)
         ON DELETE SET NULL,
-	InstitutionID int NOT NULL
+	InstitutionID int
 	    REFERENCES Loan_Provider (InstitutionID)
         ON DELETE SET NULL,
     EventName varchar(255) NOT NULL,
     EventBudget int CHECK(EventBudget >= 0),
     PlanningFee int CHECK(PlanningFee >= 0),
     StartTimestamp timestamp,
-    EndTimestamp timestamp CHECK(EndTimestamp > StartTimestamp),
-    PRIMARY KEY (EventID, ClientUserID)
+    EndTimestamp timestamp CHECK(EndTimestamp > StartTimestamp)
 );
 
 
