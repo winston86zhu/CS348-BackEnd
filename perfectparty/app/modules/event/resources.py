@@ -8,7 +8,26 @@ from .managers import EventManager
 class EventResource(Resource):
     @staticmethod
     def get():
-        pass 
+
+        user_id = request.args.get('user',1)
+        manager = EventManager()
+
+        try:
+            result = manager.fetch_by_clientid(user_id)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        response = jsonify(result)
+        response.status_code = 201
+        return response
+
+
+
 
     @staticmethod
     def post():

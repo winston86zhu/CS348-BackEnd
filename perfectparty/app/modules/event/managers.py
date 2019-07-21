@@ -61,7 +61,7 @@ class EventManager(db_conn):
         query = f"""
             SELECT * 
             FROM Event
-            WHERE ClientUserID={client_id};
+            WHERE ClientUserID={client_id}
         """
 
         try:
