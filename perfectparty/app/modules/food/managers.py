@@ -34,4 +34,4 @@ class FoodManager(db_conn):
             self.rollback()
             raise e
 
-        return self.deserialize(result)
+        return list(self.deserialize(row) for row in result)
