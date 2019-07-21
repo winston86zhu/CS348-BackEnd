@@ -24,9 +24,9 @@ class EventResource(Resource):
 
         try:
             client_user_id = payload['client_user_id']
-            planner_user_id = payload.get('planner_user_id', None)
-            location_id = payload.get('location_id', None)
-            institution_id = payload('institution_id', None)
+            planner_user_id = payload.get('planner_user_id', "null")
+            location_id = payload.get('location_id', "null")
+            institution_id = payload.get('institution_id', "null")
             event_name = payload['event_name']
             event_budget = payload.get('event_budget', 0)
             planning_fee = payload.get('planning_fee', 0)
