@@ -1,19 +1,19 @@
 from extensions import DatabaseConnection as db_conn
-from .models import User
+from .models import Music
 
 
-class UserManager(db_conn):
+class MusicManager(db_conn):
     def __init__(self):
         pass
 
     def deserialize(self, row):
-        return User(*row)
+        return Music(*row)
 
-    def create(self, user):
+    def create(self, music):
         query = f"""
             INSERT 
-            INTO "user" (FirstName, LastName, Email, Password)
-            VALUES('{user.first_name}', '{user.last_name}', '{user.email}', '{user.password}')
+            INTO Music (Genre, Artist)
+            VALUES('{music.Genre}', '{music.Artist}');
         """
 
         try:
@@ -22,15 +22,14 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-    def fetch_by_email(self, email):
+    def fetch_all_music(self):
         query = f"""
             SELECT * 
-            FROM "user" 
-            WHERE Email='{email}'
+            FROM Music;
         """
 
         try:
-            result = self.fetch_single_row(query)
+            result = self.fetch_all_rows(query)
         except Exception as e:
             self.rollback()
             raise e

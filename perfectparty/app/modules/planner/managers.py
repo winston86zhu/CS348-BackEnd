@@ -1,19 +1,19 @@
 from extensions import DatabaseConnection as db_conn
-from .models import User
+from .models import Planner
 
 
-class UserManager(db_conn):
+class PlannerManager(db_conn):
     def __init__(self):
         pass
 
     def deserialize(self, row):
-        return User(*row)
+        return Planner(*row)
 
-    def create(self, user):
+    def create(self, planner):
         query = f"""
             INSERT 
-            INTO "user" (FirstName, LastName, Email, Password)
-            VALUES('{user.first_name}', '{user.last_name}', '{user.email}', '{user.password}')
+            INTO Planner (Position, Rate, BankingAccount)
+            VALUES('{planner.Position}', {planner.Rate}, '{planner.BankingAccount}');
         """
 
         try:
@@ -22,15 +22,14 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-    def fetch_by_email(self, email):
+    def fetch_all_planner(self):
         query = f"""
             SELECT * 
-            FROM "user" 
-            WHERE Email='{email}'
+            FROM Planner;
         """
 
         try:
-            result = self.fetch_single_row(query)
+            result = self.fetch_all_rows(query)
         except Exception as e:
             self.rollback()
             raise e

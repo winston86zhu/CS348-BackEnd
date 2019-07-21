@@ -2,9 +2,8 @@ from dataclasses import dataclass
 
 
 @dataclass
-class User:
+class Planner:
     user_id: int
-    first_name: str
-    last_name: str
-    email: str
-    password: str
+    Position: str
+    Rate: int
+    BankingAccount: str
