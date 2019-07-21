@@ -8,7 +8,21 @@ from .managers import LPManager
 class LPResource(Resource):
     @staticmethod
     def get():
-        pass
+        manager = LPManager()
+
+        try:
+            result = manager.fetch_all_LP()
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        response = jsonify(result)
+        response.status_code = 200
+        return response
 
     @staticmethod
     def post():

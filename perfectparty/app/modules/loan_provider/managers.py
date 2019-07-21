@@ -12,7 +12,7 @@ class LPManager(db_conn):
     def create(self, lp):
         query = f"""
             INSERT 
-            INTO Loan_Provider (Loan_ProviderName, PhoneNumber, EmbeddedURL)
+            INTO LoanProvider (Loan_ProviderName, PhoneNumber, EmbeddedURL)
             VALUES ('{lp.Loan_ProviderName}',
             {lp.PhoneNumber}, '{lp.EmbeddedURL}');
         """
@@ -26,7 +26,7 @@ class LPManager(db_conn):
     def fetch_by_id(self, lp_id):
         query = f"""
             SELECT * 
-            FROM Loan_Provider 
+            FROM LoanProvider 
             WHERE InstitutionID={lp_id};
         """
         try:
@@ -40,7 +40,7 @@ class LPManager(db_conn):
     def fetch_all_LP(self):
         query = f"""
             SELECT * 
-            FROM Loan_Provider;
+            FROM LoanProvider;
         """
 
         try:
@@ -49,4 +49,4 @@ class LPManager(db_conn):
             self.rollback()
             raise e
 
-        return self.deserialize(result)
+        return list(self.deserialize(row) for row in result)

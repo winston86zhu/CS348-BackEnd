@@ -106,7 +106,7 @@ CREATE TABLE Location (
 );
 
 
-CREATE TABLE Loan_Provider (
+CREATE TABLE LoanProvider (
 	InstitutionID int NOT NULL PRIMARY KEY,
 	Loan_Provider_Name varchar(255) NOT NULL,
 	PhoneNumber int NOT NULL,
