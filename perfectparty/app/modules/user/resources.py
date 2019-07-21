@@ -16,10 +16,14 @@ class UserResource(Resource):
         try:
             if (user_type == "client"):
                 result = manager.fetch_from_client()
+                for row in result:
+                    row.account_balance = float(row.account_balance)
             elif(user_type == "supplier"):
                 result = manager.fetch_from_supplier()
             elif(user_type == "planner"):
                 result = manager.fetch_from_planner()
+                for row in result:
+                    row.rate = float(row.rate)
             else:
                 pass
         except Exception as e:
@@ -30,7 +34,7 @@ class UserResource(Resource):
             response.status_code = 500
             return response
 
-        print("hahhaha")
+
         response = jsonify(result)
         response.status_code = 201
         return response
@@ -95,6 +99,7 @@ class UserResource(Resource):
                 client = Client(user_id, first_name, last_name, email, password, account_balance)
                 manager.create_client(client)
                 result = manager.fetch_client_by_user_id(user_id)
+                result.account_balance = float(result.account_balance)
             elif user_type == 'supplier':
                 supplier = Supplier(user_id, first_name, last_name, email, password, banking_account, website_link, contact_email)
                 manager.create_supplier(supplier)
@@ -103,6 +108,7 @@ class UserResource(Resource):
                 planner = Planner(user_id, first_name, last_name, email, password, position, rate, banking_account)
                 manager.create_planner(planner)
                 result = manager.fetch_planner_by_user_id(user_id)
+                result.rate = float(result.rate)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',

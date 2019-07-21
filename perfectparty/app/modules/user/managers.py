@@ -110,20 +110,21 @@ class UserManager(db_conn):
                 ON "user".UserID = planner.PlannerUserID 
             WHERE UserID={user_id}
         """
+
         try:
             result = self.fetch_single_row(query)
         except Exception as e:
             self.rollback()
             raise e
 
-        return self.deserialize(result)
+        return self.deserialize_planner(result)
 
     def fetch_from_client(self):
         query = f"""
         SELECT UserID, FirstName, LastName, Email, Password, AccountBalance
             FROM "user"
             INNER JOIN client
-                ON "user".UserID = client.ClientUserID 
+            ON "user".UserID = client.ClientUserID 
         """
         try:
             result = self.fetch_all_rows(query)
@@ -131,14 +132,14 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return list(self.deserialize(row) for row in result)
+        return list(self.deserialize_client(row) for row in result)
     
     def fetch_from_supplier(self):
         query = f"""
-        SELECT "user".UserID,"user".FirstName,"user".LastName,"user".Email,
-        "user".Password FROM "user" 
-        INNER JOIN Supplier 
-        ON Supplier.SupplierUserID = "user".UserID; 
+        SELECT UserID, FirstName, LastName, Email, Password, BankingAccount, WebsiteLink, ContactEmail
+        FROM "user"
+        INNER JOIN supplier
+            ON "user".UserID = supplier.SupplierUserID
         """
         try:
             result = self.fetch_all_rows(query)
@@ -146,7 +147,7 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return list(self.deserialize(row) for row in result)
+        return list(self.deserialize_supplier(row) for row in result)
 
     def fetch_from_planner(self):
         query = f"""
@@ -161,5 +162,5 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return list(self.deserialize(row) for row in result)
+        return list(self.deserialize_planner(row) for row in result)
 
