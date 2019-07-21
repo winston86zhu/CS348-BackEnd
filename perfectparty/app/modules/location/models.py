@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class Location:
-    LocationID: int
-    LocationCapacity: int
-    LocationOpenHours: str
-    LocationName: str
-    LocationAddress: str
-    LocationPrice: int
+    location_id: int
+    location_capacity: int
+    location_open_hours: str
+    location_name: str
+    location_address: str
+    location_price: int

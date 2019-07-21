@@ -17,8 +17,11 @@ class LocationResource(Resource):
                 'error': 'Internal Error',
                 'message': f'Unknown error: {str(e)}'
             })
-            response.status_code = 600
+            response.status_code = 500
             return response
+
+        for row in result:
+            row.location_open_hours = str(row.location_open_hours)
 
         response = jsonify(result)
         response.status_code = 200
@@ -37,11 +40,11 @@ class LocationResource(Resource):
             return response
 
         try:
-            location_capacity = payload['LocationCapacity']
-            location_open_hours = payload['LocationOpenHours']
-            location_name = payload['LocationName']
-            location_address = payload['LocationAddress']
-            location_price = payload['LocationPrice']
+            location_capacity = payload['location_capacity']
+            location_open_hours = payload['location_open_hours']
+            location_name = payload['location_name']
+            location_address = payload['location_address']
+            location_price = payload['location_price']
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',
@@ -73,6 +76,9 @@ class LocationResource(Resource):
             response.status_code = 500
             return response
 
+        for row in result:
+            row.location_open_hours = str(row.location_open_hours)
+        
         response = jsonify(result)
         response.status_code = 201
         return response

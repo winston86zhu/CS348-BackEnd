@@ -97,7 +97,7 @@ CREATE TABLE ProvidedBy (
 
 
 CREATE TABLE Location (
-	LocationID int NOT NULL PRIMARY KEY,
+	LocationID SERIAL PRIMARY KEY,
 	LocationCapacity int NOT NULL CHECK(LocationCapacity > 0),
 	LocationOpenHours INTERVAL NOT NULL,
 	LocationName varchar(255) NOT NULL,
@@ -147,6 +147,5 @@ CREATE TABLE "order" (
         ON DELETE CASCADE,
 	EventID int NOT NULL REFERENCES Event (EventID),
 	Quantity int Check(Quantity > 0),
-	PRIMARY KEY (ItemID, SupplierUserID, ClientUserID, EventID),
-        ON DELETE CASCADE
+	PRIMARY KEY (ItemID, SupplierUserID, ClientUserID, EventID)
 );

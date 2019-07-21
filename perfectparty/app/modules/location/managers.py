@@ -13,7 +13,7 @@ class LocationManager(db_conn):
         query = f"""
             INSERT 
             INTO Location (LocationCapacity, LocationOpenHours, LocationName, LocationAddress, LocationPrice)
-            VALUES({location.LocationCapacity}, {location.LocationOpenHours}, '{location.LocationName}', '{location.LocationAddress}', {location.LocationPrice});
+            VALUES({location.location_capacity}, {location.location_open_hours}, '{location.location_name}', '{location.location_address}', {location.location_price});
         """
 
         try:
