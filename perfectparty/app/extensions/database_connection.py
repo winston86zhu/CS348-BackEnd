@@ -1,3 +1,4 @@
+
 import psycopg2
 
 
@@ -23,3 +24,7 @@ class DatabaseConnection:
     def fetch_all_rows(self, query):
         cur.execute(query)
         return cur.fetchall()
+
+    def fetchone(self):
+        return cur.fetchone()
+

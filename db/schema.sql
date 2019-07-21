@@ -153,3 +153,4 @@ CREATE TABLE "order" (
 	FOREIGN KEY (EventID, ClientUserID) REFERENCES Event (EventID, ClientUserID)
         ON DELETE CASCADE
 );
+
