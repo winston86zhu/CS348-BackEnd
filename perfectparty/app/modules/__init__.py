@@ -1,5 +1,4 @@
-
-MODULES = ['user', 'auth', 'event', 'order', 'location','loan_provider']
+MODULES = ['user', 'auth', 'event', 'order', 'location']
 
 
 def init_api(api):
@@ -7,4 +6,3 @@ def init_api(api):
 
     for module_name in MODULES:
         import_module('.{}'.format(module_name), package=__name__).init_api(api)
-
