@@ -5,7 +5,7 @@ from .models import LP
 from .managers import LPManager
 
 
-class UserResource(Resource):
+class LPResource(Resource):
     @staticmethod
     def get():
         pass
