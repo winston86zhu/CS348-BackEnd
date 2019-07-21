@@ -8,8 +8,33 @@ from .managers import UserManager
 class UserResource(Resource):
     @staticmethod
     def get():
-        pass
 
+        #user?type=client
+        user_type = request.args.get('type',1)
+        manager = UserManager()
+
+        try:
+            if (user_type == "client"):
+                result = manager.fetch_from_client()
+            elif(user_type == "supplier"):
+                result = manager.fetch_from_supplier()
+            elif(user_type == "planner"):
+                result = manager.fetch_from_planner()
+            else:
+                pass
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        print("hahhaha")
+        response = jsonify(result)
+        response.status_code = 201
+        return response
+    
     @staticmethod
     def post():
         payload = request.get_json()

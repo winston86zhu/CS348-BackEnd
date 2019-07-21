@@ -28,7 +28,6 @@ class UserManager(db_conn):
             FROM "user" 
             WHERE Email='{email}'
         """
-
         try:
             result = self.fetch_single_row(query)
         except Exception as e:
@@ -36,3 +35,49 @@ class UserManager(db_conn):
             raise e
 
         return self.deserialize(result)
+
+    def fetch_from_client(self):
+        query = f"""
+        SELECT UserID, FirstName, LastName, Email, Password, AccountBalance
+            FROM "user"
+            INNER JOIN client
+                ON "user".UserID = client.ClientUserID 
+        """
+        try:
+            result = self.fetch_all_rows(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+        return list(self.deserialize(row) for row in result)
+    
+    def fetch_from_supplier(self):
+        query = f"""
+        SELECT "user".UserID,"user".FirstName,"user".LastName,"user".Email,
+        "user".Password FROM "user" 
+        INNER JOIN Supplier 
+        ON Supplier.SupplierUserID = "user".UserID; 
+        """
+        try:
+            result = self.fetch_all_rows(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+        return list(self.deserialize(row) for row in result)
+
+    def fetch_from_planner(self):
+        query = f"""
+        SELECT "user".UserID,"user".FirstName,"user".LastName,"user".Email,
+        "user".Password FROM "user" 
+        INNER JOIN Planner 
+        ON PLanner.PlannerUserID = "user".UserID; 
+        """
+        try:
+            result = self.fetch_all_rows(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+        return list(self.deserialize(row) for row in result)
+

@@ -8,7 +8,6 @@ from .managers import EventManager
 class EventResource(Resource):
     @staticmethod
     def get():
-
         user_id = request.args.get('user',1)
         manager = EventManager()
 
