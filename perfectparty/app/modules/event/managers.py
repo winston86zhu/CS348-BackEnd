@@ -33,7 +33,8 @@ class EventManager(db_conn):
                 {event.planning_fee},
                 '{event.start_timestamp}', 
                 '{event.end_timestamp}'
-            );
+            )
+            RETURNING EventID;
         """
 
         try:
@@ -59,9 +60,15 @@ class EventManager(db_conn):
 
     def fetch_by_clientid(self, client_id):
         query = f"""
-            SELECT * 
-            FROM Event
-            WHERE ClientUserID={client_id}
+            SELECT e.EventID, e.ClientUserID, e.PlannerUserID, e.LocationID, e.InstitutionID, e.EventName, e.EventBudget, e.PlanningFee, e.StartTimestamp, e.EndTimestamp,
+                CASE WHEN o.count is NULL THEN 0 ELSE o.count END AS orders
+            FROM (
+                SELECT EventID, count(*) AS count
+	            FROM "order" 
+	            GROUP BY EventID
+	        ) o
+            RIGHT JOIN event e
+	        ON e.EventID = o.EventID AND e.ClientUserID = {client_id};
         """
 
         try:

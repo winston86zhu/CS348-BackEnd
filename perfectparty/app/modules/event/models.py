@@ -13,3 +13,4 @@ class Event:
     planning_fee: int
     start_timestamp: str
     end_timestamp: str
+    orders: int = 0

@@ -74,6 +74,7 @@ class EventResource(Resource):
 
         try:
             manager.create(event)
+            result = manager.fetchone()
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
@@ -82,9 +83,10 @@ class EventResource(Resource):
             response.status_code = 500
             return response
 
+        event_id = result[0]
+
         try:
-            # TODO: this needs to be fixed... should fetch the recently created event instead of all
-            result = manager.fetch_by_clientid(event.client_user_id)
+            result = manager.fetch_by_eventid(event_id)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
