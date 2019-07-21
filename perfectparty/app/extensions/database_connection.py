@@ -1,3 +1,4 @@
+
 import psycopg2
 
 
@@ -26,3 +27,4 @@ class DatabaseConnection:
 
     def fetchone(self):
         return cur.fetchone()
+

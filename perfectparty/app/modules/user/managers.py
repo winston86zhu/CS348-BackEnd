@@ -163,4 +163,3 @@ class UserManager(db_conn):
             raise e
 
         return list(self.deserialize_planner(row) for row in result)
-

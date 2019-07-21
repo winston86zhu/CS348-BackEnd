@@ -1,3 +1,4 @@
+
 from dataclasses import dataclass
 
 
@@ -27,3 +28,4 @@ class Planner(User):
     position: str
     rate: float
     banking_account: str
+

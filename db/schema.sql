@@ -97,42 +97,43 @@ CREATE TABLE ProvidedBy (
 
 
 CREATE TABLE Location (
-	LocationID SERIAL PRIMARY KEY,
+	LocationID int NOT NULL PRIMARY KEY,
 	LocationCapacity int NOT NULL CHECK(LocationCapacity > 0),
-	LocationOpenHour int NOT NULL,
-	LocationCloseHour int NOT NULL,
+	LocationOpenHours INTERVAL NOT NULL,
 	LocationName varchar(255) NOT NULL,
 	LocationAddress varchar(255) NOT NULL,
     LocationPrice int NOT NULL CHECK(LocationPrice > 0)
 );
 
 
-CREATE TABLE Loan_Provider (
+CREATE TABLE LoanProvider (
 	InstitutionID int NOT NULL PRIMARY KEY,
+	Loan_Provider_Name varchar(255) NOT NULL,
 	PhoneNumber int NOT NULL,
 	EmbeddedURL varchar(255) NOT NULL
 );
 
 
 CREATE TABLE Event (
-	EventID SERIAL PRIMARY KEY,
+	EventID int NOT NULL,
 	ClientUserID int NOT NULL
 	    REFERENCES Client (ClientUserID)
 	    ON DELETE CASCADE,
-    PlannerUserID int
+    PlannerUserID int NOT NULL
         REFERENCES Planner (PlannerUserID)
         ON DELETE SET NULL,
-	LocationID int
+	LocationID int NOT NULL
 	    REFERENCES Location (LocationID)
         ON DELETE SET NULL,
-	InstitutionID int
+	InstitutionID int NOT NULL
 	    REFERENCES Loan_Provider (InstitutionID)
         ON DELETE SET NULL,
     EventName varchar(255) NOT NULL,
     EventBudget int CHECK(EventBudget >= 0),
     PlanningFee int CHECK(PlanningFee >= 0),
     StartTimestamp timestamp,
-    EndTimestamp timestamp CHECK(EndTimestamp > StartTimestamp)
+    EndTimestamp timestamp CHECK(EndTimestamp > StartTimestamp),
+    PRIMARY KEY (EventID, ClientUserID)
 );
 
 
@@ -146,7 +147,10 @@ CREATE TABLE "order" (
 	ClientUserID int NOT NULL
         REFERENCES Client (ClientUserID)
         ON DELETE CASCADE,
-	EventID int NOT NULL REFERENCES Event (EventID),
+	EventID int NOT NULL,
 	Quantity int Check(Quantity > 0),
-	PRIMARY KEY (ItemID, SupplierUserID, ClientUserID, EventID)
+	PRIMARY KEY (ItemID, SupplierUserID, ClientUserID, EventID),
+	FOREIGN KEY (EventID, ClientUserID) REFERENCES Event (EventID, ClientUserID)
+        ON DELETE CASCADE
 );
+
