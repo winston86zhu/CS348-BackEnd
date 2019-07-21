@@ -145,9 +145,8 @@ CREATE TABLE "order" (
 	ClientUserID int NOT NULL
         REFERENCES Client (ClientUserID)
         ON DELETE CASCADE,
-	EventID int NOT NULL,
+	EventID int NOT NULL REFERENCES Event (EventID),
 	Quantity int Check(Quantity > 0),
 	PRIMARY KEY (ItemID, SupplierUserID, ClientUserID, EventID),
-	FOREIGN KEY (EventID, ClientUserID) REFERENCES Event (EventID, ClientUserID)
         ON DELETE CASCADE
 );
