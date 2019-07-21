@@ -14,7 +14,7 @@ class LPManager(db_conn):
             INSERT 
             INTO Loan_Provider (Loan_ProviderName, PhoneNumber, EmbeddedURL)
             VALUES ('{lp.Loan_ProviderName}',
-            '{lp.PhoneNumber}', '{lp.EmbeddedURL}')
+            {lp.PhoneNumber}, '{lp.EmbeddedURL}');
         """
 
         try:
@@ -27,7 +27,7 @@ class LPManager(db_conn):
         query = f"""
             SELECT * 
             FROM Loan_Provider 
-            WHERE InstitutionID='{lp_id}'
+            WHERE InstitutionID={lp_id};
         """
         try:
             result = self.fetch_single_row(query)
@@ -40,7 +40,7 @@ class LPManager(db_conn):
     def fetch_all_LP(self):
         query = f"""
             SELECT * 
-            FROM Loan_Provider
+            FROM Loan_Provider;
         """
 
         try:
