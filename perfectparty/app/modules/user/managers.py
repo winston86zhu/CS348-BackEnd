@@ -151,10 +151,10 @@ class UserManager(db_conn):
 
     def fetch_from_planner(self):
         query = f"""
-        SELECT "user".UserID,"user".FirstName,"user".LastName,"user".Email,
-        "user".Password FROM "user" 
-        INNER JOIN Planner 
-        ON PLanner.PlannerUserID = "user".UserID; 
+        SELECT UserID, FirstName, LastName, Email, Password, Position, Rate, BankingAccount
+        FROM "user"
+        INNER JOIN planner
+            ON "user".UserID = planner.PlannerUserID 
         """
         try:
             result = self.fetch_all_rows(query)
