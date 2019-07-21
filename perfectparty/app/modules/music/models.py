@@ -2,9 +2,8 @@ from dataclasses import dataclass
 
 
 @dataclass
-class User:
-    user_id: int
-    first_name: str
-    last_name: str
-    email: str
-    password: str
+class Music:
+    music_id: int
+    Genre: str
+    Artist: str
+
