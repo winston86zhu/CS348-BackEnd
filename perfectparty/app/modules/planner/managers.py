@@ -13,7 +13,8 @@ class PlannerManager(db_conn):
         query = f"""
             INSERT 
             INTO Planner (Position, Rate, BankingAccount)
-            VALUES('{planner.Position}', {planner.Rate}, '{planner.BankingAccount}');
+            VALUES('{planner.Position}', {planner.Rate},
+             '{planner.BankingAccount}');
         """
 
         try:

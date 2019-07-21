@@ -13,7 +13,7 @@ class PlannerResource(Resource):
         """
         manager = PlannerManager()
         try:
-            result = manager.fetch_all_music()
+            result = manager.fetch_all_planner()
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
