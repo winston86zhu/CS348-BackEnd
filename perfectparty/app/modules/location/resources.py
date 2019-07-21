@@ -20,9 +20,6 @@ class LocationResource(Resource):
             response.status_code = 500
             return response
 
-        for row in result:
-            row.location_open_hours = str(row.location_open_hours)
-
         response = jsonify(result)
         response.status_code = 200
         return response
@@ -41,7 +38,8 @@ class LocationResource(Resource):
 
         try:
             location_capacity = payload['location_capacity']
-            location_open_hours = payload['location_open_hours']
+            location_open_hour = payload['location_open_hour']
+            location_close_hour = payload['location_close_hour']
             location_name = payload['location_name']
             location_address = payload['location_address']
             location_price = payload['location_price']
@@ -54,7 +52,7 @@ class LocationResource(Resource):
             return response
 
         manager = LocationManager()
-        location = Location(-1, location_capacity, location_open_hours, location_name, location_address, location_price)
+        location = Location(-1, location_capacity, location_open_hour, location_close_hour, location_name, location_address, location_price)
 
         try:
             manager.create(location)
@@ -76,9 +74,6 @@ class LocationResource(Resource):
             response.status_code = 500
             return response
 
-        for row in result:
-            row.location_open_hours = str(row.location_open_hours)
-        
         response = jsonify(result)
         response.status_code = 201
         return response

@@ -99,7 +99,8 @@ CREATE TABLE ProvidedBy (
 CREATE TABLE Location (
 	LocationID SERIAL PRIMARY KEY,
 	LocationCapacity int NOT NULL CHECK(LocationCapacity > 0),
-	LocationOpenHours INTERVAL NOT NULL,
+	LocationOpenHour int NOT NULL,
+	LocationCloseHour int NOT NULL,
 	LocationName varchar(255) NOT NULL,
 	LocationAddress varchar(255) NOT NULL,
     LocationPrice int NOT NULL CHECK(LocationPrice > 0)

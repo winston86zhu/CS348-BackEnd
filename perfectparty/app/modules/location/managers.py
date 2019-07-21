@@ -12,8 +12,8 @@ class LocationManager(db_conn):
     def create(self, location):
         query = f"""
             INSERT 
-            INTO Location (LocationCapacity, LocationOpenHours, LocationName, LocationAddress, LocationPrice)
-            VALUES({location.location_capacity}, {location.location_open_hours}, '{location.location_name}', '{location.location_address}', {location.location_price});
+            INTO Location (LocationCapacity, LocationOpenHour, LocationCloseHour, LocationName, LocationAddress, LocationPrice)
+            VALUES({location.location_capacity}, {location.location_open_hour}, {location.location_close_hour}, '{location.location_name}', '{location.location_address}', {location.location_price});
         """
 
         try:
