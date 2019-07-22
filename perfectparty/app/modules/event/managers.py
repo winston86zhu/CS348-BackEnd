@@ -67,8 +67,8 @@ class EventManager(db_conn):
 	            FROM "order" 
 	            GROUP BY EventID
 	        ) o
-            RIGHT JOIN event e
-	        ON e.EventID = o.EventID AND e.ClientUserID = {client_id};
+            RIGHT JOIN (SELECT * FROM event WHERE ClientUserID={client_id}) e
+	        ON e.EventID = o.EventID;
         """
 
         try:
