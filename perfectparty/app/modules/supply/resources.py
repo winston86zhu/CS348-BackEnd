@@ -16,8 +16,8 @@ class SupplyResource(Resource):
         try:
             if (user_type == "flower"):
                 result = manager.fetch_from_flower()
-                # for row in result:
-                #     row.ItemPrice = float(row.ItemPrice)
+                for row in result:
+                    row.ItemPrice = float(row.ItemPrice)
             elif(user_type == "food"):
                 result = manager.fetch_from_food()
                 for row in result:
@@ -182,7 +182,7 @@ class SpecificSupplyResource(Resource):
         manager = SuppplyManager()
         updated_supply = ""
         try:
-            updated_general_supply = Supply(item_id, ItemPrice, ItemName);
+            updated_general_supply = Supply(item_id, ItemPrice, ItemName)
             if user_type == 'flower':
                 updated_supply = Flower(item_id, ItemPrice, ItemName, flower_color)
             elif user_type == 'music':
