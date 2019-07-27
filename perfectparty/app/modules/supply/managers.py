@@ -206,7 +206,7 @@ class SuppplyManager(db_conn):
     def update_supply(self, supply):
         query = f"""
             UPDATE supply
-            SET ItemPrice = '{supply.ItemPrice}',
+            SET ItemPrice = {supply.ItemPrice},
             SET ItemName = '{supply.ItemName}'
             WHERE ItemId = {supply.item_id}
         """

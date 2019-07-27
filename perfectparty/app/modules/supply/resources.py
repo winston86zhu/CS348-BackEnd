@@ -27,7 +27,14 @@ class SupplyResource(Resource):
                 for row in result:
                     row.ItemPrice = float(row.ItemPrice)
             else:
-                pass
+                raise ValueError('Did not input type variable')
+        except ValueError as e1:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Please enter a value: {str(e1)}'
+            })
+            response.status_code = 500
+            return response
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
