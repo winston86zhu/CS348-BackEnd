@@ -164,3 +164,54 @@ class SuppplyManager(db_conn):
             raise e
 
         return list(self.deserialize_food(row) for row in result)
+    
+    def update_flower(self, flower):
+        query = f"""
+            UPDATE flower
+            SET FlowerColor = '{flower.flower_color}'
+            WHERE LocationID = {flower.ItemId}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+    def update_music(self, music):
+        query = f"""
+            UPDATE music
+            SET Genre = '{music.genre}',
+            SET Artist = '{music.artist}'
+            WHERE LocationID = {music.item_id}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+    def update_food(self, food):
+        query = f"""
+            UPDATE food
+            SET FoodType = '{food.FoodType}',
+            SET FoodIngredients = '{food.FoodIngredients}'
+            WHERE LocationID = {food.item_id}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+    def update_supply(self, supply):
+        query = f"""
+            UPDATE supply
+            SET ItemPrice = '{supply.ItemPrice}',
+            SET ItemName = '{supply.ItemName}'
+            WHERE ItemId = {supply.item_id}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
