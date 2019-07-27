@@ -33,7 +33,7 @@ class SuppplyManager(db_conn):
         query = f"""
             INSERT
             INTO Music (ItemId, Genre, Artist)
-            VALUES ({supply.item_id},'{supply.Genre}', '{supply.Artist}')
+            VALUES ({supply.item_id},'{supply.genre}', '{supply.artist}')
         """
 
         try:
@@ -57,7 +57,7 @@ class SuppplyManager(db_conn):
     def create_food(self, food):
         query = f"""
             INSERT
-            INTO Food (ItemId, FoodType, FoodIngredients)
+            INTO Food (ItemId,FoodType, FoodIngredients)
             VALUES ({food.item_id}, '{food.FoodType}', '{food.FoodIngredients}')
         """
 
@@ -69,11 +69,11 @@ class SuppplyManager(db_conn):
 
     def fetch_music_by_item_id(self, item_id):
         query = f"""
-            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
+            SELECT Supply.ItemId, ItemPrice, ItemName, Genre, Artist
             FROM Supply
             INNER JOIN Music
                 ON Music.ItemId = Supply.ItemId 
-            WHERE ItemId={item_id}
+            WHERE Supply.ItemId={item_id}
         """
 
         try:
@@ -86,11 +86,11 @@ class SuppplyManager(db_conn):
 
     def fetch_flower_by_item_id(self, item_id):
         query = f"""
-            SELECT ItemId, ItemPrice, ItemName, FlowerColor
+            SELECT Flower.ItemId, ItemPrice, ItemName, FlowerColor
             FROM Supply
             INNER JOIN Flower
                 ON Supply.ItemId = Flower.ItemId 
-            WHERE ItemId={item_id}
+            WHERE Supply.ItemId={item_id}
         """
 
         try:
@@ -103,11 +103,11 @@ class SuppplyManager(db_conn):
 
     def fetch_food_by_item_id(self, item_id):
         query = f"""
-            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
+            SELECT Supply.ItemId,ItemPrice, ItemName, FoodType,FoodIngredients
             FROM Supply
             INNER JOIN Food
-                ON Supply.ItemId = Flower.ItemId 
-            WHERE ItemId={item_id}
+                ON Supply.ItemId = Food.ItemId 
+            WHERE Supply.ItemId={item_id}
         """
 
         try:
@@ -169,7 +169,7 @@ class SuppplyManager(db_conn):
         query = f"""
             UPDATE flower
             SET FlowerColor = '{flower.flower_color}'
-            WHERE LocationID = {flower.ItemId}
+            WHERE ItemID = {flower.ItemId}
         """
         try:
             self.execute_write_op(query)
@@ -181,8 +181,8 @@ class SuppplyManager(db_conn):
         query = f"""
             UPDATE music
             SET Genre = '{music.genre}',
-            SET Artist = '{music.artist}'
-            WHERE LocationID = {music.item_id}
+             Artist = '{music.artist}'
+            WHERE ItemID = {music.item_id}
         """
         try:
             self.execute_write_op(query)
@@ -194,8 +194,8 @@ class SuppplyManager(db_conn):
         query = f"""
             UPDATE food
             SET FoodType = '{food.FoodType}',
-            SET FoodIngredients = '{food.FoodIngredients}'
-            WHERE LocationID = {food.item_id}
+             FoodIngredients = '{food.FoodIngredients}'
+            WHERE ItemID = {food.item_id}
         """
         try:
             self.execute_write_op(query)
@@ -207,7 +207,7 @@ class SuppplyManager(db_conn):
         query = f"""
             UPDATE supply
             SET ItemPrice = {supply.ItemPrice},
-            SET ItemName = '{supply.ItemName}'
+                ItemName = '{supply.ItemName}'
             WHERE ItemId = {supply.item_id}
         """
         try:

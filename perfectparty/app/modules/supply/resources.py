@@ -85,7 +85,7 @@ class SupplyResource(Resource):
             return response
 
         manager = SuppplyManager()
-        supply = Supply(-1, item_id, ItemPrice, ItemName)
+        supply = Supply(item_id, ItemPrice, ItemName)
 
         try:
             manager.create_supply(supply)
@@ -110,10 +110,12 @@ class SupplyResource(Resource):
                 music = Music(item_id, ItemPrice, ItemName, genre, artist)
                 manager.create_music(music)
                 result = manager.fetch_music_by_item_id(item_id)
+                result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'food':
                 food = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients)
                 manager.create_food(food)
                 result = manager.fetch_food_by_item_id(item_id)
+                result.ItemPrice = float(result.ItemPrice)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
@@ -164,7 +166,8 @@ class SpecificSupplyResource(Resource):
             return response
 
         try:
-            ItemPrice = payload['ItemPrice']
+            ItemPrice = float(payload['ItemPrice'])
+            ItemPrice = float(ItemPrice)
             ItemName = payload['ItemName']
             user_type = payload['supply_type']
 
@@ -188,6 +191,7 @@ class SpecificSupplyResource(Resource):
 
         manager = SuppplyManager()
         updated_supply = ""
+
         try:
             updated_general_supply = Supply(item_id, ItemPrice, ItemName)
             if user_type == 'flower':
@@ -206,7 +210,7 @@ class SpecificSupplyResource(Resource):
 
 
         try:
-            manager.updated_supply(updated_general_supply)
+            manager.update_supply(updated_general_supply)
             if user_type == 'flower':
                 manager.update_flower(updated_supply)
             elif user_type == 'music':
@@ -227,8 +231,10 @@ class SpecificSupplyResource(Resource):
                 result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'music':
                 result = manager.fetch_music_by_item_id(item_id)
+                result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'food':
                 result = manager.fetch_food_by_item_id(item_id)
+                result.ItemPrice = float(result.ItemPrice)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
