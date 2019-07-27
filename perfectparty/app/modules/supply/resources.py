@@ -5,10 +5,10 @@ from .models import Supply, Flower, Food, Music
 from .managers import SuppplyManager
 
 
+
 class SupplyResource(Resource):
     @staticmethod
     def get():
-
         #supply?type=music
         user_type = request.args.get('type',1)
         manager = SuppplyManager()
@@ -119,117 +119,117 @@ class SupplyResource(Resource):
         response.status_code = 201
         return response
 
-    class SpecificSupplyResource(Resource):
-        @staticmethod
-        def get(item_id):
-            manager = SuppplyManager()
-            #supply/supply_id?type=music
-            user_type = request.args.get('type',1)
-            try:
-                if user_type == 'flower':
-                    result = manager.fetch_flower_by_item_id(item_id)
-                elif user_type == 'food':
-                    result = manager.fetch_food_by_item_id(item_id)
-                elif user_type == 'music':
-                    result = manager.fetch_music_by_item_id(item_id)
-            except Exception as e:
-                response = jsonify({
-                    'error': 'Internal Error',
-                    'message': f'Unknown error: {str(e)}'
-                })
-                response.status_code = 500
-                return response
-
-            response = jsonify(result)
-            response.status_code = 200
+class SpecificSupplyResource(Resource):
+    @staticmethod
+    def get(item_id):
+        manager = SuppplyManager()
+        #supply/supply_id?type=music
+        user_type = request.args.get('type',1)
+        try:
+            if user_type == 'flower':
+                result = manager.fetch_flower_by_item_id(item_id)
+            elif user_type == 'food':
+                result = manager.fetch_food_by_item_id(item_id)
+            elif user_type == 'music':
+                result = manager.fetch_music_by_item_id(item_id)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
             return response
 
-        @staticmethod
-        def put(item_id):
-            payload = request.get_json()
+        response = jsonify(result)
+        response.status_code = 200
+        return response
 
-            if not payload:
-                response = jsonify({
-                    'error': 'Bad Format',
-                    'message': 'Unable to parse payload'
-                })
-                response.status_code = 400
-                return response
+    @staticmethod
+    def put(item_id):
+        payload = request.get_json()
 
-            try:
-                ItemPrice = payload['ItemPrice']
-                ItemName = payload['ItemName']
-                user_type = payload['supply_type']
-
-                if user_type == 'flower':
-                    flower_color = payload['flower_color']
-                elif user_type == 'music':
-                    genre = payload['genre']
-                    artist = payload['artist']
-                elif user_type == 'food':
-                    FoodType = payload['FoodType']
-                    FoodIngredients = payload['FoodIngredients']
-                else:
-                    raise KeyError('supply_type')
-            except KeyError as e:
-                response = jsonify({
-                    'error': 'KeyError',
-                    'message': f'Missing key {str(e)} from payload'
-                })
-                response.status_code = 400
-                return response
-
-            manager = SuppplyManager()
-            updated_supply = ""
-            try:
-                updated_general_supply = Supply(item_id, ItemPrice, ItemName);
-                if user_type == 'flower':
-                    updated_supply = Flower(item_id, ItemPrice, ItemName, flower_color)
-                elif user_type == 'music':
-                    updated_supply = Music(item_id, ItemPrice, ItemName, genre, artist)
-                elif user_type == 'food':
-                    updated_supply = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients)
-            except Exception as e:
-                response = jsonify({
-                    'error': 'Internal Error',
-                    'message': f'Unknown error: {str(e)}'
-                })
-                response.status_code = 500
-                return response
-
-
-            try:
-                manager.updated_supply(updated_general_supply)
-                if user_type == 'flower':
-                    manager.update_flower(updated_supply)
-                elif user_type == 'music':
-                    manager.update_music(updated_supply)
-                elif user_type == 'food':
-                    manager.update_food(updated_supply)
-            except Exception as e:
-                response = jsonify({
-                    'error': 'Internal Error',
-                    'message': f'Unknown error: {str(e)}'
-                })
-                response.status_code = 500
-                return response
-
-            try:
-                if user_type == 'flower':
-                    result = manager.fetch_flower_by_item_id(item_id)
-                    result.ItemPrice = float(result.ItemPrice)
-                elif user_type == 'music':
-                    result = manager.fetch_music_by_item_id(item_id)
-                elif user_type == 'food':
-                    result = manager.fetch_food_by_item_id(item_id)
-            except Exception as e:
-                response = jsonify({
-                    'error': 'Internal Error',
-                    'message': f'Unknown error: {str(e)}'
-                })
-                response.status_code = 500
-                return response
-
-            response = jsonify(result)
-            response.status_code = 200
+        if not payload:
+            response = jsonify({
+                'error': 'Bad Format',
+                'message': 'Unable to parse payload'
+            })
+            response.status_code = 400
             return response
+
+        try:
+            ItemPrice = payload['ItemPrice']
+            ItemName = payload['ItemName']
+            user_type = payload['supply_type']
+
+            if user_type == 'flower':
+                flower_color = payload['flower_color']
+            elif user_type == 'music':
+                genre = payload['genre']
+                artist = payload['artist']
+            elif user_type == 'food':
+                FoodType = payload['FoodType']
+                FoodIngredients = payload['FoodIngredients']
+            else:
+                raise KeyError('supply_type')
+        except KeyError as e:
+            response = jsonify({
+                'error': 'KeyError',
+                'message': f'Missing key {str(e)} from payload'
+            })
+            response.status_code = 400
+            return response
+
+        manager = SuppplyManager()
+        updated_supply = ""
+        try:
+            updated_general_supply = Supply(item_id, ItemPrice, ItemName);
+            if user_type == 'flower':
+                updated_supply = Flower(item_id, ItemPrice, ItemName, flower_color)
+            elif user_type == 'music':
+                updated_supply = Music(item_id, ItemPrice, ItemName, genre, artist)
+            elif user_type == 'food':
+                updated_supply = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+
+        try:
+            manager.updated_supply(updated_general_supply)
+            if user_type == 'flower':
+                manager.update_flower(updated_supply)
+            elif user_type == 'music':
+                manager.update_music(updated_supply)
+            elif user_type == 'food':
+                manager.update_food(updated_supply)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        try:
+            if user_type == 'flower':
+                result = manager.fetch_flower_by_item_id(item_id)
+                result.ItemPrice = float(result.ItemPrice)
+            elif user_type == 'music':
+                result = manager.fetch_music_by_item_id(item_id)
+            elif user_type == 'food':
+                result = manager.fetch_food_by_item_id(item_id)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        response = jsonify(result)
+        response.status_code = 200
+        return response
