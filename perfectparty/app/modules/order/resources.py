@@ -23,11 +23,12 @@ class OrderResource(Resource):
             return response
 
         try:
-            item_id = payload['item_id']
-            client_user_id = payload['client_user_id']
-            supplier_user_id = payload['supplier_user_id']
-            event_id = payload['event_id']
-            quantity = payload['quantity']
+            stripped_payload = {k: v for k, v in payload.items() if v}
+            item_id = stripped_payload['item_id']
+            client_user_id = stripped_payload.get('client_user_id', "null")
+            supplier_user_id = stripped_payload['supplier_user_id']
+            event_id = stripped_payload['event_id']
+            quantity = stripped_payload['quantity']
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',

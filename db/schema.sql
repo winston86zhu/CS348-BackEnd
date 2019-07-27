@@ -144,7 +144,7 @@ CREATE TABLE "order" (
 	SupplierUserID int NOT NULL
         REFERENCES Supplier (SupplierUserID)
         ON DELETE CASCADE,
-	ClientUserID int NOT NULL
+	ClientUserID int
         REFERENCES Client (ClientUserID)
         ON DELETE CASCADE,
 	EventID int NOT NULL REFERENCES Event (EventID),
