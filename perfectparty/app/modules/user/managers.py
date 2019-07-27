@@ -164,3 +164,58 @@ class UserManager(db_conn):
 
         return list(self.deserialize_planner(row) for row in result)
 
+    def update_user(self, user):
+        query = f"""
+            UPDATE "user"
+            SET FirstName = '{user.first_name}',
+                LastName = '{user.last_name}',
+                Email = '{user.email}',
+                Password = '{user.password}'
+            WHERE LocationID = {user.user_id}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+    def update_client(self, user):
+        query = f"""
+            UPDATE Client
+            SET AccountBalance = {user.account_balance}
+            WHERE LocationID = {user.user_id}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+    def update_supplier(self, user):
+        query = f"""
+            UPDATE supplier
+            SET BankingAccount = '{user.banking_account}',
+                WebsiteLink = '{user.website_link}',
+                ContactEmail ='{user.contact_email}'
+            WHERE LocationID = {user.user_id}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+    def update_planner(self, user):
+        query = f"""
+            UPDATE Planner
+            SET Position = '{user.position}',
+                Rate = {user.rate},
+                BankingAccount ='{user.contact_email}'
+            WHERE LocationID = {user.banking_account}
+        """
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+

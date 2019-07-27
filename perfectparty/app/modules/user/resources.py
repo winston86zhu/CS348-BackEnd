@@ -120,3 +120,124 @@ class UserResource(Resource):
         response = jsonify(result)
         response.status_code = 201
         return response
+
+class SpecificUserResource(Resource):
+    @staticmethod
+    def get(user_id):
+        manager = UserManager()
+
+        user_type = request.args.get('type',1)
+        try:
+            if user_type == 'client':
+                result = manager.fetch_client_by_user_id(user_id)
+            elif user_type == 'supplier':
+                result = manager.fetch_supplier_by_user_id(user_id)
+            elif user_type == 'planner':
+                result = manager.fetch_planner_by_user_id(user_id)
+
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        response = jsonify(result)
+        response.status_code = 200
+        return response
+
+    @staticmethod
+    def put(user_id):
+        payload = request.get_json()
+
+        if not payload:
+            response = jsonify({
+                'error': 'Bad Format',
+                'message': 'Unable to parse payload'
+            })
+            response.status_code = 400
+            return response
+
+        try:
+            user_id = payload['user_id']
+            first_name = payload['first_name']
+            last_name = payload['last_name']
+            email = payload['email']
+            password = payload['password']
+            user_type = payload['user_type']
+
+            if user_type == 'client':
+                account_balance = payload['account_balance']
+            elif user_type == 'supplier':
+                banking_account = payload['banking_account']
+                website_link = payload['website_link']
+                contact_email = payload['contact_email']
+            elif user_type == 'planner':
+                position = payload['position']
+                rate = payload['rate']
+                banking_account = payload['banking_account']
+            else:
+                raise KeyError('user_type')
+        except KeyError as e:
+            response = jsonify({
+                'error': 'KeyError',
+                'message': f'Missing key {str(e)} from payload'
+            })
+            response.status_code = 400
+            return response
+
+        manager = UserManager()
+        updated_user = ""
+        try:
+            updated_general_user = User(user_id, first_name, last_name,email, password)
+            if user_type == 'client':
+                updated_user = Client(user_id, account_balance)
+            elif user_type == 'supplier':
+                updated_user = Supplier(user_id, banking_account, website_link,contact_email)
+            elif user_type == 'planner':
+                updated_user = Planner(user_id, position,rate,banking_account)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        
+        try:
+            manager.update_user(updated_general_user)
+            if user_type == 'client':
+                manager.update_client(updated_user)
+            elif user_type == 'supplier':
+                manager.update_supplier(updated_user)
+            elif user_type == 'planner':
+                manager.update_planner(updated_user)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        try:
+            if user_type == 'client':
+                result = manager.fetch_client_by_user_id(user_id)
+                result.ItemPrice = float(result.ItemPrice)
+            elif user_type == 'supplier':
+                result = manager.fetch_supplier_by_user_id(user_id)
+            elif user_type == 'planner':
+                result = manager.fetch_planner_by_user_id(user_id)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        response = jsonify(result)
+        response.status_code = 200
+        return response
