@@ -169,7 +169,7 @@ class SuppplyManager(db_conn):
         query = f"""
             UPDATE flower
             SET FlowerColor = '{flower.flower_color}'
-            WHERE ItemID = {flower.ItemId}
+            WHERE ItemId = {flower.ItemId}
         """
         try:
             self.execute_write_op(query)
@@ -182,7 +182,7 @@ class SuppplyManager(db_conn):
             UPDATE music
             SET Genre = '{music.genre}',
              Artist = '{music.artist}'
-            WHERE ItemID = {music.item_id}
+            WHERE ItemId = {music.item_id}
         """
         try:
             self.execute_write_op(query)
@@ -195,7 +195,7 @@ class SuppplyManager(db_conn):
             UPDATE food
             SET FoodType = '{food.FoodType}',
              FoodIngredients = '{food.FoodIngredients}'
-            WHERE ItemID = {food.item_id}
+            WHERE ItemId = {food.item_id}
         """
         try:
             self.execute_write_op(query)
