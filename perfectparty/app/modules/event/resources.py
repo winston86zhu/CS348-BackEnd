@@ -38,15 +38,16 @@ class EventResource(Resource):
             return response
 
         try:
-            client_user_id = payload['client_user_id']
-            planner_user_id = payload.get('planner_user_id', "null")
-            location_id = payload.get('location_id', "null")
-            institution_id = payload.get('institution_id', "null")
-            event_name = payload['event_name']
-            event_budget = payload.get('event_budget', 0)
-            planning_fee = payload.get('planning_fee', 0)
-            start_timestamp = payload['start_timestamp']
-            end_timestamp = payload['end_timestamp']
+            stripped_payload = {k: v for k, v in payload.items() if v}
+            client_user_id = stripped_payload['client_user_id']
+            planner_user_id = stripped_payload.get('planner_user_id', "null")
+            location_id = stripped_payload.get('location_id', "null")
+            institution_id = stripped_payload.get('institution_id', "null")
+            event_name = stripped_payload['event_name']
+            event_budget = stripped_payload.get('event_budget', 0)
+            planning_fee = stripped_payload.get('planning_fee', 0)
+            start_timestamp = stripped_payload['start_timestamp']
+            end_timestamp = stripped_payload['end_timestamp']
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',
@@ -129,15 +130,16 @@ class SpecificEventResource(Resource):
             return response
 
         try:
-            client_user_id = payload['client_user_id']
-            planner_user_id = payload.get('planner_user_id', "null")
-            location_id = payload.get('location_id', "null")
-            institution_id = payload.get('institution_id', "null")
-            event_name = payload['event_name']
-            event_budget = payload.get('event_budget', 0)
-            planning_fee = payload.get('planning_fee', 0)
-            start_timestamp = payload['start_timestamp']
-            end_timestamp = payload['end_timestamp']
+            stripped_payload = {k: v for k, v in payload.items() if v}
+            client_user_id = stripped_payload['client_user_id']
+            planner_user_id = stripped_payload.get('planner_user_id', "null")
+            location_id = stripped_payload.get('location_id', "null")
+            institution_id = stripped_payload.get('institution_id', "null")
+            event_name = stripped_payload['event_name']
+            event_budget = stripped_payload.get('event_budget', 0)
+            planning_fee = stripped_payload.get('planning_fee', 0)
+            start_timestamp = stripped_payload['start_timestamp']
+            end_timestamp = stripped_payload['end_timestamp']
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',
