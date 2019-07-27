@@ -108,7 +108,7 @@ CREATE TABLE Location (
 
 
 CREATE TABLE Loan_Provider (
-	InstitutionID int NOT NULL PRIMARY KEY,
+	InstitutionID SERIAL PRIMARY KEY,
 	Name varchar(255),
 	PhoneNumber int NOT NULL,
 	EmbeddedURL varchar(255) NOT NULL
