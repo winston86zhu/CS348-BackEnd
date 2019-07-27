@@ -171,7 +171,7 @@ class UserManager(db_conn):
                 LastName = '{user.last_name}',
                 Email = '{user.email}',
                 Password = '{user.password}'
-            WHERE LocationID = {user.user_id}
+            WHERE UserID = {user.user_id}
         """
         try:
             self.execute_write_op(query)
@@ -183,7 +183,7 @@ class UserManager(db_conn):
         query = f"""
             UPDATE Client
             SET AccountBalance = {user.account_balance}
-            WHERE LocationID = {user.user_id}
+            WHERE ClientUserID = {user.user_id}
         """
         try:
             self.execute_write_op(query)
@@ -197,7 +197,7 @@ class UserManager(db_conn):
             SET BankingAccount = '{user.banking_account}',
                 WebsiteLink = '{user.website_link}',
                 ContactEmail ='{user.contact_email}'
-            WHERE LocationID = {user.user_id}
+            WHERE SupplierUserID = {user.user_id}
         """
         try:
             self.execute_write_op(query)
@@ -211,7 +211,7 @@ class UserManager(db_conn):
             SET Position = '{user.position}',
                 Rate = {user.rate},
                 BankingAccount ='{user.contact_email}'
-            WHERE LocationID = {user.banking_account}
+            WHERE PlannerUserID = {user.banking_account}
         """
         try:
             self.execute_write_op(query)
