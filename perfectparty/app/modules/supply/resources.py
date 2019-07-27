@@ -1,29 +1,31 @@
 from flask import request, jsonify
 from flask_restful import Resource
 
-from .models import User, Client, Supplier, Planner
-from .managers import UserManager
+from .models import Supply, Flower, Food, Music
+from .managers import SuppplyManager
 
 
 class UserResource(Resource):
     @staticmethod
     def get():
 
-        #user?type=client
+        #supply?type=music
         user_type = request.args.get('type',1)
-        manager = UserManager()
+        manager = SuppplyManager()
 
         try:
-            if (user_type == "client"):
-                result = manager.fetch_from_client()
+            if (user_type == "flower"):
+                result = manager.fetch_from_flower()
                 for row in result:
-                    row.account_balance = float(row.account_balance)
-            elif(user_type == "supplier"):
-                result = manager.fetch_from_supplier()
-            elif(user_type == "planner"):
-                result = manager.fetch_from_planner()
-                for row in result:
-                    row.rate = float(row.rate)
+                    row.ItemPrice = float(row.ItemPrice)
+            elif(user_type == "food"):
+                result = manager.fetch_from_food()
+                 for row in result:
+                    row.ItemPrice = float(row.ItemPrice)
+            elif(user_type == "music"):
+                result = manager.fetch_from_music()
+                 for row in result:
+                    row.ItemPrice = float(row.ItemPrice)
             else:
                 pass
         except Exception as e:
@@ -52,22 +54,18 @@ class UserResource(Resource):
             return response
 
         try:
-            first_name = payload['firstName']
-            last_name = payload['lastName']
-            email = payload['email']
-            password = payload['password']
-            user_type = payload['user_type']
+            item_id = payload['item_id']
+            ItemPrice = payload['ItemPrice']
+            ItemName = payload['ItemName']
 
-            if user_type == 'client':
-                account_balance = payload['account_balance']
-            elif user_type == 'supplier':
-                banking_account = payload['banking_account']
-                website_link = payload['website_link']
-                contact_email = payload['contact_email']
-            elif user_type == 'planner':
-                position = payload['position']
-                rate = payload['rate']
-                banking_account = payload['banking_account']
+            if user_type == 'flower':
+                flower_color = payload['flower_color']
+            elif user_type == 'music':
+                genre = payload['genre']
+                artist = payload['artist']
+            elif user_type == 'food':
+                FoodType = payload['FoodType']
+                FoodIngredients = payload['FoodIngredients']
             else:
                 raise KeyError('user_type')
         except KeyError as e:
@@ -78,11 +76,11 @@ class UserResource(Resource):
             response.status_code = 400
             return response
 
-        manager = UserManager()
-        user = User(-1, first_name, last_name, email, password)
+        manager = SuppplyManager()
+        supply = Supply(-1, first_name, last_name, email, password)
 
         try:
-            manager.create_user(user)
+            supply.create_supply(supply)
             result = manager.fetchone()
         except Exception as e:
             response = jsonify({
@@ -92,23 +90,22 @@ class UserResource(Resource):
             response.status_code = 500
             return response
 
-        user_id = result[0]
+        item_id = result[0]
 
         try:
-            if user_type == 'client':
-                client = Client(user_id, first_name, last_name, email, password, account_balance)
-                manager.create_client(client)
-                result = manager.fetch_client_by_user_id(user_id)
-                result.account_balance = float(result.account_balance)
-            elif user_type == 'supplier':
-                supplier = Supplier(user_id, first_name, last_name, email, password, banking_account, website_link, contact_email)
-                manager.create_supplier(supplier)
-                result = manager.fetch_supplier_by_user_id(user_id)
-            elif user_type == 'planner':
-                planner = Planner(user_id, first_name, last_name, email, password, position, rate, banking_account)
-                manager.create_planner(planner)
-                result = manager.fetch_planner_by_user_id(user_id)
-                result.rate = float(result.rate)
+            if user_type == 'flower':
+                flower = Flower(item_id, ItemPrice, ItemName, flower_color)
+                manager.create_flower(flower)
+                result = manager.fetch_flower_by_item_id(item_id)
+                result.ItemPrice = float(result.ItemPrice)
+            elif user_type == 'music':
+                music = Music(item_id, ItemPrice, ItemName, genre, artist)
+                manager.create_music(music)
+                result = manager.fetch_music_by_item_id(item_id)
+            elif user_type == 'food':
+                food = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients);
+                manager.create_food(food)
+                result = manager.fetch_food_by_item_id(item_id)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',

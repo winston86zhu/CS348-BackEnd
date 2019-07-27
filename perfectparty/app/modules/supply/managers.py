@@ -2,7 +2,7 @@ from extensions import DatabaseConnection as db_conn
 from .models import Flower, Food, Music
 
 
-class UserManager(db_conn):
+class SuppplyManager(db_conn):
     def __init__(self):
         pass
 
@@ -19,7 +19,7 @@ class UserManager(db_conn):
         query = f"""
             INSERT 
             INTO Supply (ItemPrice, ItemName)
-            VALUES('{supply.ItemPrice}', '{supply.ItemName}')
+            VALUES({supply.ItemPrice}, '{supply.ItemName}')
             RETURNING ItemId
         """
 
@@ -32,8 +32,8 @@ class UserManager(db_conn):
     def create_music(self, supply):
         query = f"""
             INSERT
-            INTO Music (Genre, Artist)
-            VALUES ({supply.Genre}, {supply.Artist})
+            INTO Music (ItemId, Genre, Artist)
+            VALUES ({supply.item_id},'{supply.Genre}', '{supply.Artist}')
         """
 
         try:
@@ -42,24 +42,23 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-    def create_supplier(self, supplier):
+    def create_flower(self, flower):
         query = f"""
             INSERT
-            INTO supplier (SupplierUserID, BankingAccount, WebsiteLink, ContactEmail)
-            VALUES ({supplier.user_id}, '{supplier.banking_account}', '{supplier.website_link}', '{supplier.contact_email}')
+            INTO Flower (ItemId, FlowerColor)
+            VALUES ({flower.item_id},'{flower.flower_color}')
         """
-
         try:
             self.execute_write_op(query)
         except Exception as e:
             self.rollback()
             raise e
 
-    def create_planner(self, planner):
+    def create_food(self, food):
         query = f"""
             INSERT
-            INTO planner (PlannerUserID, Position, Rate, BankingAccount)
-            VALUES ({planner.user_id}, '{planner.position}', {planner.rate}, '{planner.banking_account}')
+            INTO Food (ItemId, FoodType, FoodIngredients)
+            VALUES ({food.item_id}, '{food.FoodType}', '{food.FoodIngredients}')
         """
 
         try:
@@ -68,13 +67,13 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-    def fetch_client_by_user_id(self, user_id):
+    def fetch_music_by_item_id(self, item_id):
         query = f"""
-            SELECT UserID, FirstName, LastName, Email, Password, AccountBalance
-            FROM "user"
-            INNER JOIN client
-                ON "user".UserID = client.ClientUserID 
-            WHERE UserID={user_id}
+            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
+            FROM Supply
+            INNER JOIN Music
+                ON Music.ItemId = Supply.ItemId 
+            WHERE ItemId={item_id}
         """
 
         try:
@@ -83,15 +82,15 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return self.deserialize_client(result)
+        return self.deserialize_music(result)
 
-    def fetch_supplier_by_user_id(self, user_id):
+    def fetch_flower_by_item_id(self, item_id):
         query = f"""
-            SELECT UserID, FirstName, LastName, Email, Password, BankingAccount, WebsiteLink, ContactEmail
-            FROM "user"
-            INNER JOIN supplier
-                ON "user".UserID = supplier.SupplierUserID 
-            WHERE UserID={user_id}
+            SELECT ItemId, ItemPrice, ItemName, FlowerColor
+            FROM Supply
+            INNER JOIN Flower
+                ON Supply.ItemId = Flower.ItemId 
+            WHERE ItemId={item_id}
         """
 
         try:
@@ -100,15 +99,15 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return self.deserialize_supplier(result)
+        return self.deserialize_flower(result)
 
-    def fetch_planner_by_user_id(self, user_id):
+    def fetch_food_by_item_id(self, item_id):
         query = f"""
-            SELECT UserID, FirstName, LastName, Email, Password, Position, Rate, BankingAccount
-            FROM "user"
-            INNER JOIN planner
-                ON "user".UserID = planner.PlannerUserID 
-            WHERE UserID={user_id}
+            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
+            FROM Supply
+            INNER JOIN Food
+                ON Supply.ItemId = Flower.ItemId 
+            WHERE ItemId={item_id}
         """
 
         try:
@@ -117,29 +116,46 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return self.deserialize_planner(result)
+        return self.deserialize_food(result)
 
-    def fetch_from_client(self):
+    def fetch_from_music(self):
         query = f"""
-        SELECT UserID, FirstName, LastName, Email, Password, AccountBalance
-            FROM "user"
-            INNER JOIN client
-            ON "user".UserID = client.ClientUserID 
+            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
+            FROM Supply
+            INNER JOIN Music
+                ON Music.ItemId = Supply.ItemId 
         """
+
         try:
-            result = self.fetch_all_rows(query)
+            result = self.fetch_single_row(query)
         except Exception as e:
             self.rollback()
             raise e
 
-        return list(self.deserialize_client(row) for row in result)
+        return list(self.deserialize_music(row) for row in result)
     
-    def fetch_from_supplier(self):
+    def fetch_from_flower(self):
         query = f"""
-        SELECT UserID, FirstName, LastName, Email, Password, BankingAccount, WebsiteLink, ContactEmail
-        FROM "user"
-        INNER JOIN supplier
-            ON "user".UserID = supplier.SupplierUserID
+            SELECT ItemId, ItemPrice, ItemName, FlowerColor
+            FROM Supply
+            INNER JOIN Flower
+                ON Supply.ItemId = Flower.ItemId 
+        """
+
+        try:
+            result = self.fetch_single_row(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
+        return list(self.deserialize_flower(row) for row in result)
+
+    def fetch_from_food(self):
+        query = f"""
+            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
+            FROM Supply
+            INNER JOIN Food
+                ON Supply.ItemId = Flower.ItemId 
         """
         try:
             result = self.fetch_all_rows(query)
@@ -147,19 +163,4 @@ class UserManager(db_conn):
             self.rollback()
             raise e
 
-        return list(self.deserialize_supplier(row) for row in result)
-
-    def fetch_from_planner(self):
-        query = f"""
-        SELECT UserID, FirstName, LastName, Email, Password, Position, Rate, BankingAccount
-        FROM "user"
-        INNER JOIN planner
-            ON "user".UserID = planner.PlannerUserID 
-        """
-        try:
-            result = self.fetch_all_rows(query)
-        except Exception as e:
-            self.rollback()
-            raise e
-
-        return list(self.deserialize_planner(row) for row in result)
+        return list(self.deserialize_food(row) for row in result)
