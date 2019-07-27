@@ -11,7 +11,7 @@ class UserResource(Resource):
         user_type = request.args.get('type', 1)
         manager = UserManager()
 
-        if user_type != 'client' or user_type != 'supplier' or user_type != 'planner':
+        if (user_type != 'client' and user_type != 'supplier' and user_type != 'planner'):
             response = jsonify({
                 'error': 'Invalid User Type',
                 'message': f'Provided user type of {user_type} is invalid'
