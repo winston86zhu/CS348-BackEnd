@@ -16,16 +16,16 @@ class SupplyResource(Resource):
         try:
             if (user_type == "flower"):
                 result = manager.fetch_from_flower()
-                # for row in result:
-                #     row.ItemPrice = float(row.ItemPrice)
+                for row in result:
+                    row.ItemPrice = float(row.ItemPrice)
             elif(user_type == "food"):
                 result = manager.fetch_from_food()
-                # for row in result:
-                #     row.ItemPrice = float(row.ItemPrice)
+                for row in result:
+                    row.ItemPrice = float(row.ItemPrice)
             elif(user_type == "music"):
                 result = manager.fetch_from_music()
-                # for row in result:
-                #     row.ItemPrice = float(row.ItemPrice)
+                for row in result:
+                    row.ItemPrice = float(row.ItemPrice)
             else:
                 pass
         except Exception as e:
@@ -78,10 +78,10 @@ class SupplyResource(Resource):
             return response
 
         manager = SuppplyManager()
-        supply = Supply(-1, first_name, last_name, email, password)
+        supply = Supply(-1, item_id, ItemPrice, ItemName)
 
         try:
-            supply.create_supply(supply)
+            manager.create_supply(supply)
             result = manager.fetchone()
         except Exception as e:
             response = jsonify({

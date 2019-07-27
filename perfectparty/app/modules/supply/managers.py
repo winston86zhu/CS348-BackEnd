@@ -151,7 +151,6 @@ class SuppplyManager(db_conn):
         return list(self.deserialize_flower(row) for row in result)
 
     def fetch_from_food(self):
-        print("SDADADSADSD")
         query = f"""
             SELECT supply.ItemId, ItemPrice, ItemName, FoodType, FoodIngredients
             FROM supply
