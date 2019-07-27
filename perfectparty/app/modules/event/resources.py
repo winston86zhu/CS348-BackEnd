@@ -103,7 +103,7 @@ class SpecificEventResource(Resource):
         manager = EventManager()
 
         try:
-            result = manager.fetch_by_eventid(event_id)
+            result = manager.fetch_by_eventid_special(event_id)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',

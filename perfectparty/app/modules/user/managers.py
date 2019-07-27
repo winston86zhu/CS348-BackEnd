@@ -15,24 +15,6 @@ class UserManager(db_conn):
     def deserialize_planner(self, row):
         return Planner(*row)
 
-    def fetch_by_id(self, user_id):
-        query = f"""
-            SELECT *
-            FROM "user"
-                LEFT JOIN Client ON "user".UserID = Client.ClientUserID
-                LEFT JOIN Supplier ON "user".UserID = Supplier.SupplierUserID
-                LEFT JOIN Planner ON "user".UserID = Planner.PlannerUserID
-            WHERE "user".UserID = {user_id}
-        """
-
-        try:
-            result = self.fetch_single_row(query)
-        except Exception as e:
-            self.rollback()
-            raise e
-
-
-
     def create_user(self, user):
         query = f"""
             INSERT 

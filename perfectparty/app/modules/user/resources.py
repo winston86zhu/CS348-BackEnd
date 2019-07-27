@@ -123,27 +123,3 @@ class UserResource(Resource):
         response = jsonify(result)
         response.status_code = 201
         return response
-
-
-class SpecificUserResource(Resource):
-    @staticmethod
-    def get(user_id):
-        manager = UserManager()
-
-        try:
-            result = manager.fetch_by_id(user_id)
-        except Exception as e:
-            response = jsonify({
-                'error': 'Internal Error',
-                'message': f'Unknown error: {str(e)}'
-            })
-            response.status_code = 500
-            return response
-
-        response = jsonify(result)
-        response.status_code = 200
-        return response
-
-    @staticmethod
-    def put(user_id):
-        pass
