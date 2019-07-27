@@ -5,7 +5,7 @@ from .models import Supply, Flower, Food, Music
 from .managers import SuppplyManager
 
 
-class UserResource(Resource):
+class SupplyResource(Resource):
     @staticmethod
     def get():
 
@@ -16,16 +16,16 @@ class UserResource(Resource):
         try:
             if (user_type == "flower"):
                 result = manager.fetch_from_flower()
-                for row in result:
-                    row.ItemPrice = float(row.ItemPrice)
+                # for row in result:
+                #     row.ItemPrice = float(row.ItemPrice)
             elif(user_type == "food"):
                 result = manager.fetch_from_food()
-                 for row in result:
-                    row.ItemPrice = float(row.ItemPrice)
+                # for row in result:
+                #     row.ItemPrice = float(row.ItemPrice)
             elif(user_type == "music"):
                 result = manager.fetch_from_music()
-                 for row in result:
-                    row.ItemPrice = float(row.ItemPrice)
+                # for row in result:
+                #     row.ItemPrice = float(row.ItemPrice)
             else:
                 pass
         except Exception as e:
@@ -57,6 +57,7 @@ class UserResource(Resource):
             item_id = payload['item_id']
             ItemPrice = payload['ItemPrice']
             ItemName = payload['ItemName']
+            user_type = payload['supply_type']
 
             if user_type == 'flower':
                 flower_color = payload['flower_color']
@@ -67,7 +68,7 @@ class UserResource(Resource):
                 FoodType = payload['FoodType']
                 FoodIngredients = payload['FoodIngredients']
             else:
-                raise KeyError('user_type')
+                raise KeyError('supply_type')
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',

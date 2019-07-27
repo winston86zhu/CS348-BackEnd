@@ -120,14 +120,14 @@ class SuppplyManager(db_conn):
 
     def fetch_from_music(self):
         query = f"""
-            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
-            FROM Supply
-            INNER JOIN Music
-                ON Music.ItemId = Supply.ItemId 
+            SELECT supply.ItemId, ItemPrice, ItemName, Genre, Artist
+            FROM supply
+            INNER JOIN music
+            ON music.ItemId = supply.ItemId 
         """
 
         try:
-            result = self.fetch_single_row(query)
+            result = self.fetch_all_rows(query)
         except Exception as e:
             self.rollback()
             raise e
@@ -136,14 +136,14 @@ class SuppplyManager(db_conn):
     
     def fetch_from_flower(self):
         query = f"""
-            SELECT ItemId, ItemPrice, ItemName, FlowerColor
-            FROM Supply
-            INNER JOIN Flower
-                ON Supply.ItemId = Flower.ItemId 
+            SELECT supply.ItemId, ItemPrice, ItemName, FlowerColor
+            FROM supply
+            INNER JOIN flower
+            ON flower.ItemId = supply.ItemId 
         """
 
         try:
-            result = self.fetch_single_row(query)
+            result = self.fetch_all_rows(query)
         except Exception as e:
             self.rollback()
             raise e
@@ -151,11 +151,12 @@ class SuppplyManager(db_conn):
         return list(self.deserialize_flower(row) for row in result)
 
     def fetch_from_food(self):
+        print("SDADADSADSD")
         query = f"""
-            SELECT ItemId, ItemPrice, ItemName, Genre, Artist
-            FROM Supply
-            INNER JOIN Food
-                ON Supply.ItemId = Flower.ItemId 
+            SELECT supply.ItemId, ItemPrice, ItemName, FoodType, FoodIngredients
+            FROM supply
+            INNER JOIN food
+            ON supply.ItemId = food.ItemId 
         """
         try:
             result = self.fetch_all_rows(query)
