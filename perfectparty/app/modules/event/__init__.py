@@ -3,3 +3,4 @@ def init_api(api):
 
     from . import resources
     api.add_resource(resources.EventResource, f'{base_url}')
+    api.add_resource(resources.SpecificEventResource, f'{base_url}/<event_id>')

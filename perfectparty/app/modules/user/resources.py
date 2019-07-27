@@ -8,24 +8,28 @@ from .managers import UserManager
 class UserResource(Resource):
     @staticmethod
     def get():
-
-        #user?type=client
-        user_type = request.args.get('type',1)
+        user_type = request.args.get('type', 1)
         manager = UserManager()
 
+        if user_type != 'client' or user_type != 'supplier' or user_type != 'planner':
+            response = jsonify({
+                'error': 'Invalid User Type',
+                'message': f'Provided user type of {user_type} is invalid'
+            })
+            response.status_code = 422
+            return response
+
         try:
-            if (user_type == "client"):
+            if user_type == 'client':
                 result = manager.fetch_from_client()
                 for row in result:
                     row.account_balance = float(row.account_balance)
-            elif(user_type == "supplier"):
+            elif user_type == 'supplier':
                 result = manager.fetch_from_supplier()
-            elif(user_type == "planner"):
+            elif user_type == 'planner':
                 result = manager.fetch_from_planner()
                 for row in result:
                     row.rate = float(row.rate)
-            else:
-                pass
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
@@ -33,7 +37,6 @@ class UserResource(Resource):
             })
             response.status_code = 500
             return response
-
 
         response = jsonify(result)
         response.status_code = 201
@@ -120,3 +123,27 @@ class UserResource(Resource):
         response = jsonify(result)
         response.status_code = 201
         return response
+
+
+class SpecificUserResource(Resource):
+    @staticmethod
+    def get(user_id):
+        manager = UserManager()
+
+        try:
+            result = manager.fetch_by_id(user_id)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        response = jsonify(result)
+        response.status_code = 200
+        return response
+
+    @staticmethod
+    def put(user_id):
+        pass

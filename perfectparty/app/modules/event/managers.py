@@ -43,6 +43,27 @@ class EventManager(db_conn):
             self.rollback()
             raise e
 
+    def update(self, event):
+        query = f"""
+            UPDATE Event 
+            SET ClientUserID = {event.client_user_id},
+                PlannerUserID = {event.planner_user_id},
+                LocationID = {event.location_id},
+                InstitutionID = {event.institution_id},
+                EventName = '{event.event_name}',
+                EventBudget = {event.event_budget},
+                PlanningFee = {event.planning_fee},
+                StartTimestamp = '{event.start_timestamp}',
+                EndTimestamp = '{event.end_timestamp}'
+            WHERE EventID = {event.event_id};
+        """
+
+        try:
+            self.execute_write_op(query)
+        except Exception as e:
+            self.rollback()
+            raise e
+
     def fetch_by_eventid(self, event_id):
         query = f"""
             SELECT * 
