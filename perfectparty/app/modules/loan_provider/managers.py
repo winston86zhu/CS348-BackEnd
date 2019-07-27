@@ -1,20 +1,19 @@
 from extensions import DatabaseConnection as db_conn
-from .models import LP
+from .models import LoanProvider
 
 
-class LPManager(db_conn):
+class LoanProviderManager(db_conn):
     def __init__(self):
         pass
 
     def deserialize(self, row):
-        return LP(*row)
+        return LoanProvider(*row)
 
-    def create(self, lp):
+    def create(self, loan_provider):
         query = f"""
             INSERT 
-            INTO LoanProvider (Loan_ProviderName, PhoneNumber, EmbeddedURL)
-            VALUES ('{lp.Loan_ProviderName}',
-            {lp.PhoneNumber}, '{lp.EmbeddedURL}');
+            INTO Loan_Provider (Name, PhoneNumber, EmbeddedURL)
+            VALUES('{loan_provider.name}', {loan_provider.phone_number}, '{loan_provider.embedded_url}');
         """
 
         try:
@@ -22,25 +21,11 @@ class LPManager(db_conn):
         except Exception as e:
             self.rollback()
             raise e
-    
-    def fetch_by_id(self, lp_id):
-        query = f"""
-            SELECT * 
-            FROM LoanProvider 
-            WHERE InstitutionID={lp_id};
-        """
-        try:
-            result = self.fetch_single_row(query)
-        except Exception as e:
-            self.rollback()
-            raise e
 
-        return self.deserialize(result)
-
-    def fetch_all_LP(self):
+    def fetch_all_providers(self):
         query = f"""
-            SELECT * 
-            FROM LoanProvider;
+            SELECT *
+            FROM Loan_Provider;
         """
 
         try:

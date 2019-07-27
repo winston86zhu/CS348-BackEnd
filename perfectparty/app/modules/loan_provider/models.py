@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 
 @dataclass
-class LP:
-    InstitutionID: int
-    Loan_ProviderName: str
-    PhoneNumber: int
-    EmbeddedURL: str
+class LoanProvider:
+    loan_provider_id: int
+    name: str
+    phone_number: int
+    embedded_url: str
