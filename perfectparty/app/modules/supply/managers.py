@@ -231,7 +231,7 @@ class SuppplyManager(db_conn):
             UPDATE ProvidedBy
             SET SupplierUserID = '{music.supplier_user_id}',
                 Quantity = '{music.quantity}'
-            WHERE ItemId = {music.ItemId}
+            WHERE ItemId = {music.item_id}
         """
         try:
             self.execute_write_op(query)
@@ -252,7 +252,7 @@ class SuppplyManager(db_conn):
             UPDATE ProvidedBy
             SET SupplierUserID = '{food.supplier_user_id}',
                 Quantity = '{food.quantity}'
-            WHERE ItemId = {food.ItemId}
+            WHERE ItemId = {food.item_id}
         """
         try:
             self.execute_write_op(query)
@@ -273,7 +273,7 @@ class SuppplyManager(db_conn):
             UPDATE ProvidedBy
             SET SupplierUserID = '{supply.supplier_user_id}',
                 Quantity = '{supply.quantity}'
-            WHERE ItemId = {supply.ItemId}
+            WHERE ItemId = {supply.item_id}
         """
         try:
             self.execute_write_op(query)
