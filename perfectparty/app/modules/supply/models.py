@@ -14,24 +14,21 @@ class Supply:
 @dataclass
 class Flower(Supply):
     flower_color: str
-    supplier_user_id: int
-    quantity: int
+
 
 
 @dataclass
 class Music(Supply):
     genre: str
     artist: str
-    supplier_user_id: int
-    quantity: int
+
 
 
 @dataclass
 class Food(Supply):
     FoodType: str
     FoodIngredients: str
-    supplier_user_id: int
-    quantity: int
+
 
 # @dataclass
 # class ProvidedBy(Supply):
