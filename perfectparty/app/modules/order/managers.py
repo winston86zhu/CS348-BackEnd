@@ -22,10 +22,10 @@ class OrderManager(db_conn):
             self.rollback()
             raise e
 
-    def delete(self, item_id, supplier_user_id, client_user_id, event_id):
+    def delete(self, item_id, supplier_user_id, event_id):
         query = f"""
             DELETE FROM "order"
-            WHERE ItemID = {item_id} AND SupplierUserID = {supplier_user_id} AND ClientUserID = {client_user_id} AND EventID = {event_id};
+            WHERE ItemID = {item_id} AND SupplierUserID = {supplier_user_id} AND EventID = {event_id};
         """
 
         try:

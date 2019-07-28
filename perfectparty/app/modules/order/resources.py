@@ -71,7 +71,6 @@ class OrderResource(Resource):
         try:
             item_id = payload['item_id']
             supplier_user_id = payload['supplier_user_id']
-            client_user_id = payload['client_user_id']
             event_id = payload['event_id']
         except KeyError as e:
             response = jsonify({
@@ -84,7 +83,7 @@ class OrderResource(Resource):
         manager = OrderManager()
 
         try:
-            manager.delete(item_id, supplier_user_id, client_user_id, event_id)
+            manager.delete(item_id, supplier_user_id, event_id)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
