@@ -98,7 +98,7 @@ class OrderManager(db_conn):
         query = f"""
             SELECT * 
             FROM "order"
-            WHERE ItemID={item_id}, EventID={event_id};
+            WHERE ItemID={item_id} AND EventID={event_id};
         """
 
         try:
