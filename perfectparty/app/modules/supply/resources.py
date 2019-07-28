@@ -234,13 +234,11 @@ class SpecificSupplyResource(Resource):
         try:
             if user_type == 'flower':
                 result = manager.fetch_flower_by_item_id(item_id)
-                result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'music':
                 result = manager.fetch_music_by_item_id(item_id)
-                result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'food':
                 result = manager.fetch_food_by_item_id(item_id)
-                result.ItemPrice = float(result.ItemPrice)
+            result.ItemPrice = float(result.ItemPrice)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',

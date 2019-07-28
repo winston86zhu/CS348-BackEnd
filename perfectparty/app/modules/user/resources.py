@@ -229,11 +229,12 @@ class SpecificUserResource(Resource):
         try:
             if user_type == 'client':
                 result = manager.fetch_client_by_user_id(user_id)
-                result.ItemPrice = float(result.ItemPrice)
+                result.account_balance = float(result.account_balance)
             elif user_type == 'supplier':
                 result = manager.fetch_supplier_by_user_id(user_id)
             elif user_type == 'planner':
                 result = manager.fetch_planner_by_user_id(user_id)
+                result.rate = float(result.rate)
         except Exception as e:
             response = jsonify({
                 'error': 'Fetch after Update Error',
