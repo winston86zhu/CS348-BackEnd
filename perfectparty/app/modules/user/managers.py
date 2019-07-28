@@ -182,7 +182,7 @@ class UserManager(db_conn):
     def update_client(self, user):
         query = f"""
             UPDATE Client
-            SET AccountBalance = {user.account_balance},
+            SET AccountBalance = {user.account_balance}
             WHERE ClientUserID = {user.user_id}
         """
         try:
@@ -210,8 +210,8 @@ class UserManager(db_conn):
             UPDATE Planner
             SET Position = '{user.position}',
                 Rate = {user.rate},
-                BankingAccount ='{user.contact_email}'
-            WHERE PlannerUserID = {user.banking_account}
+                BankingAccount ='{user.banking_account}'
+            WHERE PlannerUserID = {user.user_id}
         """
         try:
             self.execute_write_op(query)
