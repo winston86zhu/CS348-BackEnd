@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource
 
-from .models import Supply, Flower, Food, Music, ProvidedBy
+from .models import Supply, Flower, Food, Music
 from .managers import SuppplyManager
 
 
