@@ -160,7 +160,7 @@ class SpecificUserResource(Resource):
             return response
 
         try:
-            user_id = payload['user_id']
+            #user_id = payload['user_id']
             first_name = payload['first_name']
             last_name = payload['last_name']
             email = payload['email']
@@ -188,7 +188,6 @@ class SpecificUserResource(Resource):
             return response
 
         manager = UserManager()
-        updated_user = ""
         try:
             updated_general_user = User(user_id, first_name, last_name,email, password)
             if user_type == 'client':

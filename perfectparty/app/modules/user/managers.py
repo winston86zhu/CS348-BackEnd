@@ -182,7 +182,7 @@ class UserManager(db_conn):
     def update_client(self, user):
         query = f"""
             UPDATE Client
-            SET AccountBalance = {user.account_balance}
+            SET AccountBalance = {user.account_balance},
             WHERE ClientUserID = {user.user_id}
         """
         try:
