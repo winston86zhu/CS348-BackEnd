@@ -116,7 +116,6 @@ class SupplyResource(Resource):
                 result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'food':
                 food = Food(item_id, ItemPrice, ItemName,supplier_user_id,quantity,FoodType,FoodIngredients)
-
                 manager.create_food(food)
                 result = manager.fetch_food_by_item_id(item_id)
                 result.ItemPrice = float(result.ItemPrice)
