@@ -203,14 +203,14 @@ class SuppplyManager(db_conn):
         query = f"""
             UPDATE flower
             SET FlowerColor = '{flower.flower_color}'
-            WHERE ItemId = {flower.ItemId}
+            WHERE ItemId = {flower.item_id}
         """
 
         query2 = f"""
             UPDATE ProvidedBy
             SET SupplierUserID = '{flower.supplier_user_id}',
                 Quantity = '{flower.quantity}'
-            WHERE ItemId = {flower.ItemId}
+            WHERE ItemId = {flower.item_id}
         """
         try:
             self.execute_write_op(query)
