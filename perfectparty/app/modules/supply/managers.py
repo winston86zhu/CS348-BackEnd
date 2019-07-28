@@ -148,12 +148,12 @@ class SuppplyManager(db_conn):
 
     def fetch_from_music(self):
         query = f"""
-            SELECT Supply.ItemId, ItemPrice, ItemName, Genre, Artist, SupplierUserID, Quantity
+            SELECT Supply.ItemId, ItemPrice, ItemName,ProvidedBy.SupplierUserID, ProvidedBy.Quantity,Genre, Artist
             FROM Supply
             INNER JOIN Music
                 ON Music.ItemId = Supply.ItemId 
             INNER JOIN ProvidedBy
-                ON ProvidedBy.ItemId = Supply.ItemId
+                ON ProvidedBy.ItemId = Supply.ItemId 
         """
 
         try:
@@ -166,7 +166,7 @@ class SuppplyManager(db_conn):
     
     def fetch_from_flower(self):
         query = f"""
-            SELECT Flower.ItemId, ItemPrice, ItemName, FlowerColor, SupplierUserID, Quantity
+            SELECT Flower.ItemId, ItemPrice, ItemName, ProvidedBy.SupplierUserID, ProvidedBy.Quantity,FlowerColor
             FROM Supply
             INNER JOIN Flower
                 ON Supply.ItemId = Flower.ItemId 
@@ -184,7 +184,7 @@ class SuppplyManager(db_conn):
 
     def fetch_from_food(self):
         query = f"""
-            SELECT Supply.ItemId,ItemPrice, ItemName, FoodType,FoodIngredients, SupplierUserID, Quantity
+            SELECT Supply.ItemId,ItemPrice, ItemName,ProvidedBy.SupplierUserID, ProvidedBy.Quantity, FoodType,FoodIngredients
             FROM Supply
             INNER JOIN Food
                 ON Supply.ItemId = Food.ItemId 
