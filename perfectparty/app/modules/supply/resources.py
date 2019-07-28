@@ -186,7 +186,7 @@ class SpecificSupplyResource(Resource):
                 FoodType = payload['FoodType']
                 FoodIngredients = payload['FoodIngredients']
             else:
-                raise KeyError('supply_type')
+                raise KeyError('user_type')
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',

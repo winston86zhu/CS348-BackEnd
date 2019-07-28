@@ -164,8 +164,8 @@ class SpecificUserResource(Resource):
 
         try:
             #user_id = payload['user_id']
-            first_name = payload['first_name']
-            last_name = payload['last_name']
+            first_name = payload['firstName']
+            last_name = payload['lastName']
             email = payload['email']
             password = payload['password']
             user_type = payload['user_type']
@@ -194,11 +194,13 @@ class SpecificUserResource(Resource):
         try:
             updated_general_user = User(user_id, first_name, last_name,email, password)
             if user_type == 'client':
-                updated_user = Client(user_id, account_balance)
+                updated_user = Client(user_id, first_name, last_name,email, password, account_balance)
             elif user_type == 'supplier':
-                updated_user = Supplier(user_id, banking_account, website_link,contact_email)
+                updated_user = Supplier(user_id, first_name, last_name,email, password, 
+                banking_account, website_link, contact_email)
             elif user_type == 'planner':
-                updated_user = Planner(user_id, position,rate,banking_account)
+                updated_user = Planner(user_id, first_name, last_name,email, 
+                password, position, rate, banking_account)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
@@ -218,10 +220,10 @@ class SpecificUserResource(Resource):
                 manager.update_planner(updated_user)
         except Exception as e:
             response = jsonify({
-                'error': 'Internal Error',
+                'error': 'Update Error',
                 'message': f'Unknown error: {str(e)}'
             })
-            response.status_code = 500
+            response.status_code = 501
             return response
 
         try:
@@ -234,10 +236,10 @@ class SpecificUserResource(Resource):
                 result = manager.fetch_planner_by_user_id(user_id)
         except Exception as e:
             response = jsonify({
-                'error': 'Internal Error',
+                'error': 'Fetch after Update Error',
                 'message': f'Unknown error: {str(e)}'
             })
-            response.status_code = 500
+            response.status_code = 502
             return response
 
         response = jsonify(result)
