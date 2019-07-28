@@ -13,28 +13,28 @@ class SupplyResource(Resource):
         user_type = request.args.get('type',1)
         manager = SuppplyManager()
 
+        if (user_type != 'flower' and user_type != 'food' and user_type != 'music'):
+            response = jsonify({
+                'error': 'Invalid User Type',
+                'message': f'Provided user type of {user_type} is invalid'
+            })
+            response.status_code = 422
+            return response
+
         try:
-            if (user_type == "flower"):
+            if user_type == "flower":
                 result = manager.fetch_from_flower()
                 for row in result:
                     row.ItemPrice = float(row.ItemPrice)
-            elif(user_type == "food"):
+            elif user_type == "food":
                 result = manager.fetch_from_food()
                 for row in result:
                     row.ItemPrice = float(row.ItemPrice)
-            elif(user_type == "music"):
+            elif user_type == "music":
                 result = manager.fetch_from_music()
                 for row in result:
                     row.ItemPrice = float(row.ItemPrice)
-            else:
-                raise ValueError('Did not input type variable')
-        except ValueError as e1:
-            response = jsonify({
-                'error': 'Internal Error',
-                'message': f'Please enter a value: {str(e1)}'
-            })
-            response.status_code = 500
-            return response
+
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',

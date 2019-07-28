@@ -1,5 +1,5 @@
 
-MODULES = ['user', 'auth', 'event', 'order', 'location', 'loan_provider']
+MODULES = ['user', 'auth', 'event', 'order', 'location', 'loan_provider', 'supply']
 
 def init_api(api):
     from importlib import import_module
