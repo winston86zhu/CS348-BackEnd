@@ -6,7 +6,7 @@ class Supply:
     item_id: int
     ItemPrice: float
     ItemName: str
-    supplier_id: int
+    supplier_user_id: int
     quantity: int
     
 
@@ -14,7 +14,7 @@ class Supply:
 @dataclass
 class Flower(Supply):
     flower_color: str
-    supplier_id: int
+    supplier_user_id: int
     quantity: int
 
 
@@ -22,7 +22,7 @@ class Flower(Supply):
 class Music(Supply):
     genre: str
     artist: str
-    supplier_id: int
+    supplier_user_id: int
     quantity: int
 
 
@@ -30,7 +30,7 @@ class Music(Supply):
 class Food(Supply):
     FoodType: str
     FoodIngredients: str
-    supplier_id: int
+    supplier_user_id: int
     quantity: int
 
 # @dataclass
