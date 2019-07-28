@@ -1,6 +1,6 @@
 CREATE TABLE Supply (
 	ItemId SERIAL PRIMARY KEY,
-	ItemPrice numeric(2) NOT NULL CHECK(ItemPrice > 0),
+	ItemPrice numeric(5) NOT NULL CHECK(ItemPrice > 0),
 	ItemName varchar(30) NOT NULL
 );
 
@@ -108,7 +108,8 @@ CREATE TABLE Location (
 
 
 CREATE TABLE Loan_Provider (
-	InstitutionID int NOT NULL PRIMARY KEY,
+	InstitutionID SERIAL PRIMARY KEY,
+	Name varchar(255),
 	PhoneNumber int NOT NULL,
 	EmbeddedURL varchar(255) NOT NULL
 );
@@ -143,7 +144,7 @@ CREATE TABLE "order" (
 	SupplierUserID int NOT NULL
         REFERENCES Supplier (SupplierUserID)
         ON DELETE CASCADE,
-	ClientUserID int NOT NULL
+	ClientUserID int
         REFERENCES Client (ClientUserID)
         ON DELETE CASCADE,
 	EventID int NOT NULL REFERENCES Event (EventID),

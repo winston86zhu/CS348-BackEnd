@@ -23,11 +23,12 @@ class OrderResource(Resource):
             return response
 
         try:
-            item_id = payload['item_id']
-            client_user_id = payload['client_user_id']
-            supplier_user_id = payload['supplier_user_id']
-            event_id = payload['event_id']
-            quantity = payload['quantity']
+            stripped_payload = {k: v for k, v in payload.items() if v}
+            item_id = stripped_payload['item_id']
+            client_user_id = stripped_payload.get('client_user_id', "null")
+            supplier_user_id = stripped_payload['supplier_user_id']
+            event_id = stripped_payload['event_id']
+            quantity = stripped_payload['quantity']
         except KeyError as e:
             response = jsonify({
                 'error': 'KeyError',
@@ -62,3 +63,34 @@ class OrderResource(Resource):
         response = jsonify(result)
         response.status_code = 201
         return response
+
+    @staticmethod
+    def delete():
+        payload = request.get_json()
+
+        try:
+            item_id = payload['item_id']
+            supplier_user_id = payload['supplier_user_id']
+            client_user_id = payload['client_user_id']
+            event_id = payload['event_id']
+        except KeyError as e:
+            response = jsonify({
+                'error': 'KeyError',
+                'message': f'Missing key {str(e)} from payload'
+            })
+            response.status_code = 400
+            return response
+
+        manager = OrderManager()
+
+        try:
+            manager.delete(item_id, supplier_user_id, client_user_id, event_id)
+        except Exception as e:
+            response = jsonify({
+                'error': 'Internal Error',
+                'message': f'Unknown error: {str(e)}'
+            })
+            response.status_code = 500
+            return response
+
+        return '', 204
