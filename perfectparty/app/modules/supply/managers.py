@@ -48,6 +48,12 @@ class SuppplyManager(db_conn):
             INTO Flower (ItemId, FlowerColor)
             VALUES ({flower.item_id},'{flower.flower_color}')
         """
+
+        # query2 = f"""
+        #     INSERT
+        #     INTO ProvidedBy (ItemId, SupplierUserID, Quantity)
+        #     VALUES ({flower.item_id},'{flower.flower_color}')
+        # """
         try:
             self.execute_write_op(query)
         except Exception as e:

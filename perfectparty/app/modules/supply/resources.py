@@ -61,7 +61,7 @@ class SupplyResource(Resource):
             return response
 
         try:
-            //item_id = payload['item_id']
+            #item_id = payload['item_id']
             ItemPrice = payload['ItemPrice']
             ItemName = payload['ItemName']
             user_type = payload['supply_type']
