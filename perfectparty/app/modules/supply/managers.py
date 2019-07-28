@@ -36,8 +36,15 @@ class SuppplyManager(db_conn):
             VALUES ({supply.item_id},'{supply.genre}', '{supply.artist}')
         """
 
+        query2 = f"""
+            INSERT
+            INTO ProvidedBy (ItemId, SupplierUserID, Quantity)
+            VALUES ({supply.item_id},{supply.supplier_user_id}, {supply.quantity})
+        """
+
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e
@@ -49,13 +56,15 @@ class SuppplyManager(db_conn):
             VALUES ({flower.item_id},'{flower.flower_color}')
         """
 
-        # query2 = f"""
-        #     INSERT
-        #     INTO ProvidedBy (ItemId, SupplierUserID, Quantity)
-        #     VALUES ({flower.item_id},'{flower.flower_color}')
-        # """
+        query2 = f"""
+            INSERT
+            INTO ProvidedBy (ItemId, SupplierUserID, Quantity)
+            VALUES ({flower.item_id},{flower.supplier_user_id}, {flower.quantity})
+        """
+
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e
@@ -67,18 +76,27 @@ class SuppplyManager(db_conn):
             VALUES ({food.item_id}, '{food.FoodType}', '{food.FoodIngredients}')
         """
 
+        query2 = f"""
+            INSERT
+            INTO ProvidedBy (ItemId, SupplierUserID, Quantity)
+            VALUES ({food.item_id},{food.supplier_user_id}, {food.quantity})
+        """
+
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e
 
     def fetch_music_by_item_id(self, item_id):
         query = f"""
-            SELECT Supply.ItemId, ItemPrice, ItemName, Genre, Artist
+            SELECT Supply.ItemId, ItemPrice, ItemName, Genre, Artist, SupplierUserID, Quantity
             FROM Supply
             INNER JOIN Music
                 ON Music.ItemId = Supply.ItemId 
+            INNER JOIN ProvidedBy
+                ON ProvidedBy.ItemId = Supply.ItemId 
             WHERE Supply.ItemId={item_id}
         """
 
@@ -92,10 +110,12 @@ class SuppplyManager(db_conn):
 
     def fetch_flower_by_item_id(self, item_id):
         query = f"""
-            SELECT Flower.ItemId, ItemPrice, ItemName, FlowerColor
+            SELECT Flower.ItemId, ItemPrice, ItemName, FlowerColor, SupplierUserID, Quantity
             FROM Supply
             INNER JOIN Flower
                 ON Supply.ItemId = Flower.ItemId 
+            INNER JOIN ProvidedBy
+                ON ProvidedBy.ItemId = Supply.ItemId
             WHERE Supply.ItemId={item_id}
         """
 
@@ -109,10 +129,12 @@ class SuppplyManager(db_conn):
 
     def fetch_food_by_item_id(self, item_id):
         query = f"""
-            SELECT Supply.ItemId,ItemPrice, ItemName, FoodType,FoodIngredients
+            SELECT Supply.ItemId,ItemPrice, ItemName, FoodType,FoodIngredients, SupplierUserID, Quantity
             FROM Supply
             INNER JOIN Food
                 ON Supply.ItemId = Food.ItemId 
+            INNER JOIN ProvidedBy
+                ON ProvidedBy.ItemId = Supply.ItemId 
             WHERE Supply.ItemId={item_id}
         """
 
@@ -126,10 +148,12 @@ class SuppplyManager(db_conn):
 
     def fetch_from_music(self):
         query = f"""
-            SELECT supply.ItemId, ItemPrice, ItemName, Genre, Artist
-            FROM supply
-            INNER JOIN music
-            ON music.ItemId = supply.ItemId 
+            SELECT Supply.ItemId, ItemPrice, ItemName, Genre, Artist, SupplierUserID, Quantity
+            FROM Supply
+            INNER JOIN Music
+                ON Music.ItemId = Supply.ItemId 
+            INNER JOIN ProvidedBy
+                ON ProvidedBy.ItemId = Supply.ItemId
         """
 
         try:
@@ -142,10 +166,12 @@ class SuppplyManager(db_conn):
     
     def fetch_from_flower(self):
         query = f"""
-            SELECT supply.ItemId, ItemPrice, ItemName, FlowerColor
-            FROM supply
-            INNER JOIN flower
-            ON flower.ItemId = supply.ItemId 
+            SELECT Flower.ItemId, ItemPrice, ItemName, FlowerColor, SupplierUserID, Quantity
+            FROM Supply
+            INNER JOIN Flower
+                ON Supply.ItemId = Flower.ItemId 
+            INNER JOIN ProvidedBy
+                ON ProvidedBy.ItemId = Supply.ItemId
         """
 
         try:
@@ -158,10 +184,12 @@ class SuppplyManager(db_conn):
 
     def fetch_from_food(self):
         query = f"""
-            SELECT supply.ItemId, ItemPrice, ItemName, FoodType, FoodIngredients
-            FROM supply
-            INNER JOIN food
-            ON supply.ItemId = food.ItemId 
+            SELECT Supply.ItemId,ItemPrice, ItemName, FoodType,FoodIngredients, SupplierUserID, Quantity
+            FROM Supply
+            INNER JOIN Food
+                ON Supply.ItemId = Food.ItemId 
+            INNER JOIN ProvidedBy
+                ON ProvidedBy.ItemId = Supply.ItemId 
         """
         try:
             result = self.fetch_all_rows(query)
@@ -177,8 +205,16 @@ class SuppplyManager(db_conn):
             SET FlowerColor = '{flower.flower_color}'
             WHERE ItemId = {flower.ItemId}
         """
+
+        query2 = f"""
+            UPDATE ProvidedBy
+            SET SupplierUserID = '{flower.supplier_user_id}',
+                Quantity = '{flower.quantity}'
+            WHERE ItemId = {flower.ItemId}
+        """
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e
@@ -190,8 +226,16 @@ class SuppplyManager(db_conn):
              Artist = '{music.artist}'
             WHERE ItemId = {music.item_id}
         """
+
+        query2 = f"""
+            UPDATE ProvidedBy
+            SET SupplierUserID = '{music.supplier_user_id}',
+                Quantity = '{music.quantity}'
+            WHERE ItemId = {music.ItemId}
+        """
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e
@@ -203,8 +247,16 @@ class SuppplyManager(db_conn):
              FoodIngredients = '{food.FoodIngredients}'
             WHERE ItemId = {food.item_id}
         """
+
+        query2 = f"""
+            UPDATE ProvidedBy
+            SET SupplierUserID = '{food.supplier_user_id}',
+                Quantity = '{food.quantity}'
+            WHERE ItemId = {food.ItemId}
+        """
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e
@@ -216,8 +268,16 @@ class SuppplyManager(db_conn):
                 ItemName = '{supply.ItemName}'
             WHERE ItemId = {supply.item_id}
         """
+
+        query2 = f"""
+            UPDATE ProvidedBy
+            SET SupplierUserID = '{supply.supplier_user_id}',
+                Quantity = '{supply.quantity}'
+            WHERE ItemId = {supply.ItemId}
+        """
         try:
             self.execute_write_op(query)
+            self.execute_write_op(query2)
         except Exception as e:
             self.rollback()
             raise e

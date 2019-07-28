@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource
 
-from .models import Supply, Flower, Food, Music
+from .models import Supply, Flower, Food, Music, ProvidedBy
 from .managers import SuppplyManager
 
 
@@ -65,6 +65,9 @@ class SupplyResource(Resource):
             ItemPrice = payload['ItemPrice']
             ItemName = payload['ItemName']
             user_type = payload['supply_type']
+            #For ProvidedBy
+            quantity = payload['quantity']
+            supplier_user_id = payload['supplier_id']
 
             if user_type == 'flower':
                 flower_color = payload['flower_color']
@@ -85,7 +88,7 @@ class SupplyResource(Resource):
             return response
 
         manager = SuppplyManager()
-        supply = Supply(-1, ItemPrice, ItemName)
+        supply = Supply(-1, ItemPrice, ItemName, supplier_user_id,quantity)
 
         try:
             manager.create_supply(supply)
@@ -102,17 +105,18 @@ class SupplyResource(Resource):
 
         try:
             if user_type == 'flower':
-                flower = Flower(item_id, ItemPrice, ItemName, flower_color)
+                flower = Flower(item_id, ItemPrice, ItemName, flower_color,supplier_user_id,quantity)
                 manager.create_flower(flower)
                 result = manager.fetch_flower_by_item_id(item_id)
                 result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'music':
-                music = Music(item_id, ItemPrice, ItemName, genre, artist)
+                music = Music(item_id, ItemPrice, ItemName, genre, artist,supplier_user_id,quantity)
                 manager.create_music(music)
                 result = manager.fetch_music_by_item_id(item_id)
                 result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'food':
-                food = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients)
+                food = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients,supplier_user_id,quantity)
+
                 manager.create_food(food)
                 result = manager.fetch_food_by_item_id(item_id)
                 result.ItemPrice = float(result.ItemPrice)
@@ -170,6 +174,9 @@ class SpecificSupplyResource(Resource):
             ItemPrice = float(ItemPrice)
             ItemName = payload['ItemName']
             user_type = payload['supply_type']
+            #For ProvidedBy
+            quantity = payload['quantity']
+            supplier_user_id = payload['supplier_id']
 
             if user_type == 'flower':
                 flower_color = payload['flower_color']
@@ -193,13 +200,13 @@ class SpecificSupplyResource(Resource):
         updated_supply = ""
 
         try:
-            updated_general_supply = Supply(item_id, ItemPrice, ItemName)
+            updated_general_supply = Supply(item_id, ItemPrice, ItemName,supplier_user_id,quantity)
             if user_type == 'flower':
-                updated_supply = Flower(item_id, ItemPrice, ItemName, flower_color)
+                updated_supply = Flower(item_id, ItemPrice, ItemName, flower_color,supplier_user_id,quantity)
             elif user_type == 'music':
-                updated_supply = Music(item_id, ItemPrice, ItemName, genre, artist)
+                updated_supply = Music(item_id, ItemPrice, ItemName, genre, artist,supplier_user_id,quantity)
             elif user_type == 'food':
-                updated_supply = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients)
+                updated_supply = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients,supplier_user_id,quantity)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
