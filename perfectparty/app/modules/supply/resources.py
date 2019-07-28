@@ -105,17 +105,17 @@ class SupplyResource(Resource):
 
         try:
             if user_type == 'flower':
-                flower = Flower(item_id, ItemPrice, ItemName, flower_color,supplier_user_id,quantity)
+                flower = Flower(item_id, ItemPrice, ItemName,supplier_user_id,quantity, flower_color)
                 manager.create_flower(flower)
                 result = manager.fetch_flower_by_item_id(item_id)
                 result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'music':
-                music = Music(item_id, ItemPrice, ItemName, genre, artist,supplier_user_id,quantity)
+                music = Music(item_id, ItemPrice, ItemName,supplier_user_id,quantity, genre, artist)
                 manager.create_music(music)
                 result = manager.fetch_music_by_item_id(item_id)
                 result.ItemPrice = float(result.ItemPrice)
             elif user_type == 'food':
-                food = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients,supplier_user_id,quantity)
+                food = Food(item_id, ItemPrice, ItemName,supplier_user_id,quantity,FoodType,FoodIngredients)
 
                 manager.create_food(food)
                 result = manager.fetch_food_by_item_id(item_id)
@@ -202,11 +202,11 @@ class SpecificSupplyResource(Resource):
         try:
             updated_general_supply = Supply(item_id, ItemPrice, ItemName,supplier_user_id,quantity)
             if user_type == 'flower':
-                updated_supply = Flower(item_id, ItemPrice, ItemName, flower_color,supplier_user_id,quantity)
+                updated_supply = Flower(item_id, ItemPrice, ItemName,supplier_user_id,quantity, flower_color)
             elif user_type == 'music':
-                updated_supply = Music(item_id, ItemPrice, ItemName, genre, artist,supplier_user_id,quantity)
+                updated_supply = Music(item_id, ItemPrice, ItemName,supplier_user_id,quantity, genre, artist)
             elif user_type == 'food':
-                updated_supply = Food(item_id, ItemPrice, ItemName,FoodType,FoodIngredients,supplier_user_id,quantity)
+                updated_supply = Food(item_id, ItemPrice, ItemName,supplier_user_id,quantity,FoodType,FoodIngredients)
         except Exception as e:
             response = jsonify({
                 'error': 'Internal Error',
