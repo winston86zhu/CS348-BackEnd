@@ -1,6 +1,6 @@
 CREATE TABLE Supply (
 	ItemId SERIAL PRIMARY KEY,
-	ItemPrice numeric(2) NOT NULL CHECK(ItemPrice > 0),
+	ItemPrice numeric(5) NOT NULL CHECK(ItemPrice > 0),
 	ItemName varchar(30) NOT NULL
 );
 
